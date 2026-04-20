@@ -376,7 +376,56 @@ function marcarAsistencia(qr){
 
 })();
 </script>
+  <script>
+/* 🔥 FIX TOTAL ESCÁNER + DEBUG VISUAL */
+
+(function(){
+
+  let activo = false;
+  let lector;
+
+  window.iniciarEscaner = function(){
+
+    if(activo) return;
+
+    activo = true;
+
+    const cont = document.getElementById("reader");
+    cont.innerHTML = "<p style='text-align:center'>📷 Escaneando...</p>";
+
+    lector = new Html5Qrcode("reader");
+
+    lector.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+
+      function(qr){
+        console.log("QR detectado:", qr);
+
+        // 🔴 DEBUG visible
+        alert("QR leído: " + qr);
+
+        lector.stop().then(()=>{
+          activo = false;
+
+          // 🔥 FORZAR marcar asistencia
+          marcarAsistencia(qr);
+        });
+
+      },
+
+      function(err){
+        // ignorar errores normales
+      }
+
+    ).catch(err=>{
+      alert("Error cámara: " + err);
+      activo = false;
+    });
+
+  };
+
+})();
+  </script>
 </body>
 </html>
-
-</body>
