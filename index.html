@@ -328,11 +328,10 @@ function cargarInvitados(){
   });
 }
 
-/* ESCÁNER PRO – CORREGIDO Y MEJORADO */
-let lector=null;
+/* ESCÁNER CORREGIDO - Ahora SÍ actualiza Firebase */
+let lector = null;
 
 async function iniciarEscaner(){
-
   const cont = document.getElementById("reader");
   const scanMsg = document.getElementById("scanMsg");
   
@@ -351,46 +350,67 @@ async function iniciarEscaner(){
     await lector.start(
       { facingMode: "environment" },
       {
-        fps: 18,
-        qrbox: { width: 280, height: 280 },
-        aspectRatio: 1.0,
-        disableFlip: false
+        fps: 20,
+        qrbox: { width: 260, height: 260 },
+        aspectRatio: 1.0
       },
-      async (qrText) => {   // ← Callback de escaneo exitoso (prioridad máxima)
-        // Detenemos temporalmente para procesar
-        try{ await lector.stop(); }catch(e){}
-        
-        const res = await db.collection("invitados")
-          .where("qr","==",qrText)
-          .get();
+      
+      /* === CALLBACK CUANDO SE DETECTA UN QR === */
+      async (qrText) => {
+        console.log("✅ QR detectado:", qrText); // Para que veas en consola que sí llega
 
-        if(res.empty){
-          scanMsg.innerHTML = "❌ QR inválido";
+        scanMsg.innerHTML = `🔍 QR detectado<br><small>${qrText}</small>`;
+        scanMsg.className = "status";
+
+        try {
+          const res = await db.collection("invitados")
+            .where("qr", "==", qrText)
+            .get();
+
+          if (res.empty) {
+            scanMsg.innerHTML = "❌ QR inválido";
+            scanMsg.className = "error status";
+            setTimeout(() => { scanMsg.innerHTML = ""; }, 2200);
+            return;
+          }
+
+          const docSnap = res.docs[0];
+          const d = docSnap.data();
+
+          if (d.asistio === true) {
+            scanMsg.innerHTML = `⚠️ Ya ingresó: ${d.nombre}`;
+            scanMsg.className = "warn status";
+          } else {
+            // ← AQUÍ SE ACTUALIZA FIREBASE (false → true)
+            await docSnap.ref.update({ asistio: true });
+            console.log("✅ Actualizado en Firebase - asistio: true");
+
+            scanMsg.innerHTML = `✅ Bienvenido ${d.nombre}<br><small>Actualizado en Firebase</small>`;
+            scanMsg.className = "success status";
+          }
+
+          setTimeout(() => { scanMsg.innerHTML = "✅ Cámara lista - Escanea siguiente QR"; }, 2800);
+
+        } catch (err) {
+          console.error("❌ Error Firebase:", err);
+          scanMsg.innerHTML = `❌ Error al actualizar Firebase:<br>${err.message}`;
           scanMsg.className = "error status";
-          setTimeout(()=>{ scanMsg.innerHTML=""; iniciarEscaner(); }, 2200);
-          return;
+          setTimeout(() => { scanMsg.innerHTML = ""; }, 4500);
         }
+      },
 
-        const doc = res.docs[0];
-        const d = doc.data();
-
-        if(d.asistio){
-          scanMsg.innerHTML = `⚠️ Ya ingresó: ${d.nombre}`;
-          scanMsg.className = "warn status";
-        }else{
-          await doc.ref.update({asistio:true});
-          scanMsg.innerHTML = `✅ Bienvenido ${d.nombre}`;
-          scanMsg.className = "success status";
-        }
-
-        // Reiniciamos el escáner automáticamente para el siguiente invitado
-        setTimeout(()=>{ iniciarEscaner(); }, 2400);
-      }
+      /* No mostrar nada cuando no hay QR (solo ruido normal) */
+      () => {}
     );
-  } catch(err){
-    scanMsg.innerHTML = "❌ Error al abrir cámara: " + err;
+
+    // Cámara iniciada correctamente
+    scanMsg.innerHTML = "✅ Cámara lista - Escanea un QR";
+    scanMsg.className = "status";
+
+  } catch (err) {
+    console.error("Error al iniciar cámara:", err);
+    scanMsg.innerHTML = `❌ No se pudo abrir la cámara:<br>${err.message}<br><small>¿Permiso denegado o página no en HTTPS?</small>`;
     scanMsg.className = "error status";
-    console.error(err);
   }
 }
 
