@@ -6,176 +6,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap');
-
-    :root {
-        --ios-blue: #0a84ff;
-        --glass: rgba(20, 25, 40, 0.78);
-    }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
-
-    body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        background: linear-gradient(135deg, #0a1428, #1a2338, #0a1428);
-        color: #f1f5f9;
-        min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
-    }
-
-    body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: radial-gradient(circle at 30% 20%, rgba(10, 132, 255, 0.32) 0%, transparent 55%),
-                    radial-gradient(circle at 75% 80%, rgba(10, 132, 255, 0.28) 0%, transparent 60%);
-        filter: blur(100px);
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    .container {
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .card {
-        background: var(--glass);
-        border: 1px solid rgba(148, 163, 184, 0.25);
-        border-radius: 26px;
-        padding: 26px 22px;
-        margin-bottom: 24px;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.45),
-                    0 0 0 1px rgba(255,255,255,0.09) inset;
-        backdrop-filter: blur(40px);
-        -webkit-backdrop-filter: blur(40px);
-    }
-
-    h2 {
-        text-align: center;
-        font-size: 1.75rem;
-        font-weight: 600;
-        letter-spacing: -0.8px;
-        color: #f1f5f9;
-        margin-bottom: 24px;
-        text-shadow: 0 0 20px rgba(10, 132, 255, 0.5);
-    }
-
-    input {
-        width: 100%;
-        background: rgba(15, 23, 42, 0.85);
-        border: 1.5px solid rgba(148, 163, 184, 0.3);
-        border-radius: 18px;
-        padding: 16px 20px;
-        font-size: 17px;
-        color: #f1f5f9;
-        margin-bottom: 14px;
-    }
-
-    input:focus {
-        border-color: #0a84ff;
-        box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.3);
-        outline: none;
-    }
-
-    button {
-        width: 100%;
-        border: none;
-        border-radius: 18px;
-        padding: 16px 20px;
-        font-size: 17px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        margin-top: 8px;
-    }
-
-    .btn-primary {
-        background: linear-gradient(90deg, #0a84ff, #3b9eff);
-        color: white;
-        box-shadow: 0 8px 22px rgba(10, 132, 255, 0.45);
-    }
-
-    .btn-secondary {
-        background: rgba(15, 23, 42, 0.9);
-        color: #f1f5f9;
-        border: 1px solid rgba(148, 163, 184, 0.35);
-    }
-
-    button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(10, 132, 255, 0.55);
-    }
-
-    .hidden { display: none !important; }
-
-    ul { list-style: none; padding: 0; margin: 0; }
-
-    li {
-        background: rgba(15, 23, 42, 0.85);
-        padding: 16px 20px;
-        margin-bottom: 12px;
-        border-radius: 18px;
-        border: 1px solid rgba(148, 163, 184, 0.25);
-        font-size: 16px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    #qr {
-        display: flex;
-        justify-content: center;
-        padding: 24px;
-        background: rgba(15, 23, 42, 0.9);
-        border-radius: 24px;
-        border: 1px solid rgba(148, 163, 184, 0.3);
-        box-shadow: 0 0 32px rgba(10, 132, 255, 0.3);
-        backdrop-filter: blur(20px);
-    }
-
-    #reader {
-        width: 100%;
-        min-height: 380px;
-        border-radius: 26px;
-        overflow: hidden;
-        border: 6px solid #0a84ff;
-        box-shadow: 0 0 45px rgba(10, 132, 255, 0.6),
-                    0 0 0 1px rgba(255,255,255,0.12) inset;
-        background: #0a1428;
-        position: relative;
-    }
-
-    #reader::before {
-        content: "Apunta el QR al centro";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: rgba(241, 245, 249, 0.9);
-        font-size: 15px;
-        font-weight: 500;
-        text-shadow: 0 0 18px #0a84ff;
-        z-index: 10;
-        pointer-events: none;
-    }
-
-    .status {
-        text-align: center;
-        margin-top: 16px;
-        padding: 14px 20px;
-        border-radius: 18px;
-        font-size: 16px;
-        font-weight: 500;
-        background: rgba(15, 23, 42, 0.8);
-        border: 1px solid rgba(148, 163, 184, 0.3);
-    }
-
-    .success { color: #22c55e; }
-    .error { color: #ef4444; }
-    .warn { color: #fbbf24; }
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0a192f;
+  color:#e0f2fe;
+}
+.container{max-width:500px;margin:auto;padding:20px;}
+.card{
+  background:#0f172a;
+  border:1px solid #1e3a8a;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:15px;
+}
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+}
+input{
+  background:#020617;
+  color:white;
+  border:1px solid #1e3a8a;
+}
+button{
+  background:#2563eb;
+  color:white;
+}
+.hidden{display:none;}
+#reader{width:100%;}
+li{
+  background:#020617;
+  padding:10px;
+  margin-top:5px;
+  border-radius:6px;
+}
 </style>
 </head>
 
@@ -183,269 +51,217 @@
 
 <div class="container">
 
-    <!-- REGISTRO -->
-    <div id="registro" class="card">
-        <h2>Registro</h2>
-        <input id="nombre" placeholder="Nombre completo">
-        <input id="celular" placeholder="Celular">
-        <input id="codigo" placeholder="Código admin (opcional)">
-        <button onclick="registrar()" class="btn-primary">Continuar</button>
-        <p id="msg" class="status"></p>
-    </div>
+<!-- REGISTRO -->
+<div id="registro" class="card">
+<h2>Registro</h2>
+<input id="nombre" placeholder="Nombre completo">
+<input id="celular" placeholder="Celular">
+<button onclick="registrar()">Entrar</button>
+<p id="msg"></p>
+</div>
 
-    <!-- INVITADO QR -->
-    <div id="invitado" class="card hidden">
-        <h2>Tu QR</h2>
-        <div id="qr"></div>
-        <p style="text-align:center; margin-top:16px; font-size:15px; color:#94a3b8;">Haz captura de pantalla</p>
-    </div>
+<!-- INVITADO -->
+<div id="invitado" class="card hidden">
+<h2>Tu acceso</h2>
+<div id="qr"></div>
+<p id="info"></p>
+</div>
 
-    <!-- ADMIN -->
-    <div id="admin" class="hidden">
+<!-- ADMIN -->
+<div id="admin" class="hidden">
 
-        <div class="card">
-            <h2>Agregar a Planeación</h2>
-            <input id="planNombre" placeholder="Nombre">
-            <button onclick="agregarPlaneacion()" class="btn-primary">Agregar</button>
-        </div>
+<div class="card">
+<h2>Planeación</h2>
+<input id="planNombre" placeholder="Nombre invitado">
+<button onclick="agregarPlaneacion()">Agregar</button>
+<ul id="listaPlan"></ul>
+</div>
 
-        <div class="card">
-            <h2>Planeación</h2>
-            <ul id="listaPlan"></ul>
-        </div>
+<div class="card">
+<h2>Invitados</h2>
+<ul id="listaInvitados"></ul>
+</div>
 
-        <div class="card">
-            <h2>Registrados</h2>
-            <ul id="listaInvitados"></ul>
-        </div>
-
-        <!-- ESCANEAR QR -->
-        <div class="card">
-            <h2>Escanear QR</h2>
-            
-            <div style="display:flex; gap:14px; margin-bottom:22px;">
-                <button onclick="iniciarEscaner()" class="btn-primary" style="flex:1;">📸 Abrir cámara</button>
-                <button onclick="detenerEscaner()" class="btn-secondary" style="flex:1;">⏹ Detener</button>
-            </div>
-
-            <div id="reader"></div>
-            <p id="scanMsg" class="status">Cámara lista • Apunta al QR</p>
-        </div>
-
-    </div>
+<div class="card">
+<h2>Escáner</h2>
+<button onclick="iniciarEscaner()">Abrir cámara</button>
+<div id="reader"></div>
+</div>
 
 </div>
 
+</div>
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<!-- QR -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<!-- Scanner -->
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyAWyE5VZXL5j4iFdOQoVRQ-2_DB0Eo3f6U",
-        authDomain: "fiesta-qr-55d9a.firebaseapp.com",
-        projectId: "fiesta-qr-55d9a"
-    };
+const firebaseConfig = {
+  apiKey: "TU_API",
+  authDomain: "TU_DOMINIO",
+  projectId: "TU_ID"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-    let lector = null;
-    let currentQrText = null;
+/* 🔥 NORMALIZAR NOMBRE */
+function norm(text){
+  return text.trim().toLowerCase();
+}
 
-    /* ===================== REGISTRO ===================== */
-    async function registrar() {
-        const nombreInput = document.getElementById('nombre').value.trim().toLowerCase();
-        const celularVal = document.getElementById('celular').value.trim();
-        const codigoVal = document.getElementById('codigo').value.trim();
-        const msg = document.getElementById('msg');
+/* 🔐 REGISTRO SIMPLE */
+function registrar(){
 
-        if (!nombreInput || !celularVal) {
-            msg.innerHTML = 'Completa todos los datos';
-            msg.className = 'status error';
-            return;
-        }
+  const nombre = norm(document.getElementById("nombre").value);
+  const celular = document.getElementById("celular").value;
 
-        if (codigoVal === "142534") {
-            localStorage.setItem("admin", "true");
-            document.getElementById('registro').classList.add('hidden');
-            document.getElementById('admin').classList.remove('hidden');
-            cargarPlaneacion();
-            cargarInvitados();
-            return;
-        }
+  if(!nombre || !celular){
+    msg.innerText="Completa datos";
+    return;
+  }
 
-        const res = await db.collection("invitados").where("celular", "==", celularVal).get();
-        if (!res.empty) {
-            const d = res.docs[0].data();
-            mostrarQR(d.qr);
-            msg.innerHTML = 'Sesión recuperada';
-            msg.className = 'status success';
-            return;
-        }
+  db.collection("invitados")
+    .where("nombre","==",nombre)
+    .get()
+    .then(res=>{
 
-        const palabrasUsuario = nombreInput.split(" ");
-        const resPlan = await db.collection("planeacion").get();
-        let autorizado = false;
-        resPlan.forEach(doc => {
-            const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
-            palabrasPlan.forEach(p => { if (palabrasUsuario.includes(p)) autorizado = true; });
+      // si ya existe = login
+      if(!res.empty){
+        mostrarUsuario(nombre);
+        return;
+      }
+
+      // validar planeación
+      db.collection("planeacion").get().then(snap=>{
+        let ok=false;
+
+        snap.forEach(d=>{
+          if(norm(d.data().nombre) === nombre){
+            ok=true;
+          }
         });
 
-        if (!autorizado) {
-            msg.innerHTML = 'No estás en la lista';
-            msg.className = 'status error';
-            return;
+        if(!ok){
+          msg.innerText="No estás en lista";
+          return;
         }
 
-        const qrCode = nombreInput;   // QR = nombre completo (funciona siempre)
-
-        await db.collection("invitados").add({
-            nombre: nombreInput,
-            celular: celularVal,
-            qr: qrCode,
-            asistio: false
+        db.collection("invitados").add({
+          nombre:nombre,
+          celular:celular,
+          asistio:false
         });
 
-        mostrarQR(qrCode);
-        msg.innerHTML = 'Registro exitoso';
-        msg.className = 'status success';
-    }
+        mostrarUsuario(nombre);
 
-    function mostrarQR(texto) {
-        document.getElementById('registro').classList.add('hidden');
-        document.getElementById('invitado').classList.remove('hidden');
-        const cont = document.getElementById('qr');
-        cont.innerHTML = "";
-        new QRCode(cont, {
-            text: texto,
-            width: 280,
-            height: 280,
-            colorDark: "#0a1428",
-            colorLight: "#f1f5f9",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    }
+      });
 
-    /* ===================== ADMIN ===================== */
-    function agregarPlaneacion() {
-        const n = document.getElementById('planNombre').value.trim().toLowerCase();
-        if (!n) return;
-        db.collection("planeacion").add({ nombre: n });
-        document.getElementById('planNombre').value = "";
-    }
-
-    function cargarPlaneacion() {
-        db.collection("planeacion").onSnapshot(snap => {
-            const lista = document.getElementById('listaPlan');
-            lista.innerHTML = "";
-            snap.forEach(doc => {
-                const li = document.createElement('li');
-                li.innerText = doc.data().nombre;
-                lista.appendChild(li);
-            });
-        });
-    }
-
-    function cargarInvitados() {
-        db.collection("invitados").onSnapshot(snap => {
-            const lista = document.getElementById('listaInvitados');
-            lista.innerHTML = "";
-            snap.forEach(doc => {
-                const d = doc.data();
-                const li = document.createElement('li');
-                li.innerHTML = `${d.nombre} | \( {d.celular} <span style="color:#ef4444;"> \){d.asistio ? '✔' : '❌'}</span>`;
-                lista.appendChild(li);
-            });
-        });
-    }
-
-    /* ===================== ESCÁNER QUE FUNCIONA ===================== */
-    async function iniciarEscaner() {
-        const reader = document.getElementById('reader');
-        const scanMsg = document.getElementById('scanMsg');
-        
-        reader.innerHTML = "";
-        scanMsg.innerHTML = "Iniciando cámara…";
-        scanMsg.className = "status";
-
-        if (lector) {
-            try { await lector.stop(); } catch(e) {}
-            lector = null;
-        }
-
-        lector = new Html5Qrcode("reader");
-
-        try {
-            await lector.start(
-                { facingMode: "environment" },
-                { fps: 20, qrbox: { width: 280, height: 280 } },
-                async (qrText) => {
-                    console.log("QR detectado:", qrText);
-                    currentQrText = qrText;
-
-                    // Pausamos temporalmente para procesar
-                    try { await lector.stop(); } catch(e) {}
-
-                    const res = await db.collection("invitados")
-                        .where("nombre", "==", qrText)
-                        .get();
-
-                    if (res.empty) {
-                        scanMsg.innerHTML = "❌ QR no encontrado";
-                        scanMsg.className = "status error";
-                        setTimeout(() => iniciarEscaner(), 2000);
-                        return;
-                    }
-
-                    const docSnap = res.docs[0];
-                    const data = docSnap.data();
-
-                    if (data.asistio === true) {
-                        scanMsg.innerHTML = `⚠️ Ya ingresó: ${data.nombre}`;
-                        scanMsg.className = "status warn";
-                    } else {
-                        await docSnap.ref.update({ asistio: true });
-                        console.log("✅ ASISTENCIA MARCADA en Firebase");
-                        scanMsg.innerHTML = `✅ Bienvenido<br><strong>${data.nombre}</strong>`;
-                        scanMsg.className = "status success";
-                    }
-
-                    // Reinicia el escáner automáticamente
-                    setTimeout(() => iniciarEscaner(), 2800);
-                },
-                () => {} // no QR
-            );
-
-            scanMsg.innerHTML = "📸 Cámara lista • Apunta al QR";
-            scanMsg.className = "status";
-
-        } catch (err) {
-            console.error(err);
-            scanMsg.innerHTML = `❌ Error cámara: ${err.message}<br><small>Usa HTTPS (Vercel)</small>`;
-            scanMsg.className = "status error";
-        }
-    }
-
-    function detenerEscaner() {
-        if (lector) {
-            try { lector.stop(); } catch(e) {}
-            lector = null;
-        }
-        document.getElementById('reader').innerHTML = "";
-        document.getElementById('scanMsg').innerHTML = "Cámara detenida";
-    }
-
-    /* ===================== AUTO ADMIN ===================== */
-    window.addEventListener("load", () => {
-        if (localStorage.getItem("admin") === "true") {
-            document.getElementById('registro').classList.add('hidden');
-            document.getElementById('admin').classList.remove('hidden');
-            cargarPlaneacion();
-            cargarInvitados();
-        }
     });
+
+}
+
+/* 👤 MOSTRAR USUARIO + QR = NOMBRE */
+function mostrarUsuario(nombre){
+
+  document.getElementById("registro").classList.add("hidden");
+  document.getElementById("invitado").classList.remove("hidden");
+
+  document.getElementById("qr").innerHTML="";
+
+  new QRCode(document.getElementById("qr"),{
+    text:nombre,
+    width:220,
+    height:220
+  });
+
+  document.getElementById("info").innerText = nombre;
+}
+
+/* 📋 PLANEACIÓN */
+function agregarPlaneacion(){
+  const n = norm(planNombre.value);
+  if(!n)return;
+  db.collection("planeacion").add({nombre:n});
+  planNombre.value="";
+}
+
+/* 📋 LISTAS */
+function cargar(){
+  db.collection("planeacion").onSnapshot(s=>{
+    listaPlan.innerHTML="";
+    s.forEach(d=>{
+      listaPlan.innerHTML += `<li>${d.data().nombre}</li>`;
+    });
+  });
+
+  db.collection("invitados").onSnapshot(s=>{
+    listaInvitados.innerHTML="";
+    s.forEach(d=>{
+      const x=d.data();
+      listaInvitados.innerHTML += `<li>${x.nombre} | ${x.asistio?"✔":"❌"}</li>`;
+    });
+  });
+}
+
+/* 📷 ESCANER SIMPLE */
+let lector;
+
+function iniciarEscaner(){
+
+  const cont = document.getElementById("reader");
+  cont.innerHTML="";
+
+  lector = new Html5Qrcode("reader");
+
+  lector.start(
+    { facingMode:"environment" },
+    { fps:10, qrbox:250 },
+
+    (qr)=>{
+
+      const nombre = norm(qr);
+
+      db.collection("invitados")
+        .where("nombre","==",nombre)
+        .get()
+        .then(res=>{
+
+          if(res.empty){
+            alert("No registrado");
+            return;
+          }
+
+          res.forEach(doc=>{
+            const d = doc.data();
+
+            if(d.asistio){
+              alert("Ya entró: " + d.nombre);
+            }else{
+              doc.ref.update({asistio:true});
+              alert("Bienvenido " + d.nombre);
+            }
+          });
+
+        });
+
+      lector.stop();
+
+    }
+
+  );
+
+}
+
+window.onload = cargar;
+
 </script>
 
 </body>
