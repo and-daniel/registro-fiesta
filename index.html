@@ -376,56 +376,79 @@ function marcarAsistencia(qr){
 
 })();
 </script>
-  <script>
-/* 🔥 FIX TOTAL ESCÁNER + DEBUG VISUAL */
+<script>
+/* 🔥 FIX COMPLETO ESCÁNER + ASISTENCIA (robusto y sin fallos comunes) */
 
 (function(){
 
-  let activo = false;
-  let lector;
+  let scannerInstance = null;
 
   window.iniciarEscaner = function(){
 
-    if(activo) return;
-
-    activo = true;
-
     const cont = document.getElementById("reader");
-    cont.innerHTML = "<p style='text-align:center'>📷 Escaneando...</p>";
 
-    lector = new Html5Qrcode("reader");
+    if(!cont){
+      alert("No existe contenedor #reader");
+      return;
+    }
 
-    lector.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: 250 },
+    // limpiar contenedor y scanner previo
+    cont.innerHTML = "";
+    if(scannerInstance){
+      try{ scannerInstance.clear(); }catch(e){}
+      scannerInstance = null;
+    }
 
-      function(qr){
-        console.log("QR detectado:", qr);
+    // crear scanner más estable
+    scannerInstance = new Html5QrcodeScanner("reader", {
+      fps: 10,
+      qrbox: 250,
+      rememberLastUsedCamera: true
+    });
 
-        // 🔴 DEBUG visible
-        alert("QR leído: " + qr);
+    scannerInstance.render(async (qrText) => {
 
-        lector.stop().then(()=>{
-          activo = false;
+      // 🔔 confirmación SIEMPRE
+      alert("QR detectado: " + qrText);
 
-          // 🔥 FORZAR marcar asistencia
-          marcarAsistencia(qr);
+      try{
+        scannerInstance.clear();
+      }catch(e){}
+
+      // 🔥 VALIDAR Y MARCAR ASISTENCIA
+      try{
+
+        const res = await db.collection("invitados")
+          .where("qr","==",qrText)
+          .get();
+
+        if(res.empty){
+          alert("QR inválido");
+          return;
+        }
+
+        res.forEach(async (doc)=>{
+
+          const data = doc.data();
+
+          if(data.asistio){
+            alert("Ya ingresó: " + data.nombre);
+          }else{
+            await doc.ref.update({asistio:true});
+            alert("Bienvenido " + data.nombre);
+          }
+
         });
 
-      },
-
-      function(err){
-        // ignorar errores normales
+      }catch(err){
+        alert("Error Firebase: " + err.message);
       }
 
-    ).catch(err=>{
-      alert("Error cámara: " + err);
-      activo = false;
-    });
+    }, (err)=>{});
 
   };
 
 })();
-  </script>
+</script>
 </body>
 </html>
