@@ -131,9 +131,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+/* 🔐 REGISTRO + LOGIN + VALIDACIÓN + QR CORREGIDO */
 function registrar(){
+
   const nombreInput = nombre.value.trim().toLowerCase();
-  const celularVal = celular.value;
+  const celularVal = celular.value.trim();
   const codigoVal = codigo.value;
 
   if(!nombreInput || !celularVal){
@@ -142,7 +144,9 @@ function registrar(){
     return;
   }
 
+  // ADMIN
   if(codigoVal==="142534"){
+    localStorage.setItem("admin","true");
     registro.classList.add("hidden");
     admin.classList.remove("hidden");
     cargarPlaneacion();
@@ -150,47 +154,83 @@ function registrar(){
     return;
   }
 
-  const palabrasUsuario = nombreInput.split(" ");
+  // LOGIN existente
+  db.collection("invitados").where("celular","==",celularVal).get()
+  .then(res=>{
 
-  db.collection("planeacion").get().then(res=>{
-    let autorizado=false;
+    if(!res.empty){
+      const d = res.docs[0].data();
 
-    res.forEach(doc=>{
-      const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
-      palabrasPlan.forEach(p=>{
-        if(palabrasUsuario.includes(p)){
-          autorizado=true;
-        }
+      registro.classList.add("hidden");
+      invitado.classList.remove("hidden");
+
+      const cont = document.getElementById("qr");
+      cont.innerHTML="";
+
+      new QRCode(cont,{
+        text:d.qr,
+        width:160,
+        height:160
       });
-    });
 
-    if(!autorizado){
-      msg.innerText="No estás en lista";
-      msg.className="error";
+      msg.innerText="Sesión recuperada";
+      msg.className="success";
       return;
     }
 
-    const qrCode = "QR-"+Math.random().toString(36).substr(2,8);
+    // VALIDACIÓN FLEXIBLE
+    const palabrasUsuario = nombreInput.split(" ");
 
-    db.collection("invitados").add({
-      nombre:nombreInput,
-      celular:celularVal,
-      qr:qrCode,
-      asistio:false
-    });
+    db.collection("planeacion").get().then(resPlan=>{
 
-    registro.classList.add("hidden");
-    invitado.classList.remove("hidden");
+      let autorizado=false;
 
-    new QRCode(document.getElementById("qr"),{
-      text:qrCode,
-      width:160,
-      height:160
+      resPlan.forEach(doc=>{
+        const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
+        palabrasPlan.forEach(p=>{
+          if(palabrasUsuario.includes(p)){
+            autorizado=true;
+          }
+        });
+      });
+
+      if(!autorizado){
+        msg.innerText="No estás en lista";
+        msg.className="error";
+        return;
+      }
+
+      // 🔥 QR MEJORADO (único real)
+      const qrCode = "QR-"+Date.now()+"-"+Math.random().toString(36).substring(2,10);
+
+      db.collection("invitados").add({
+        nombre:nombreInput,
+        celular:celularVal,
+        qr:qrCode,
+        asistio:false
+      });
+
+      registro.classList.add("hidden");
+      invitado.classList.remove("hidden");
+
+      const cont = document.getElementById("qr");
+      cont.innerHTML="";
+
+      new QRCode(cont,{
+        text:qrCode,
+        width:160,
+        height:160
+      });
+
+      msg.innerText="Registro exitoso";
+      msg.className="success";
+
     });
 
   });
 }
 
+/* ADMIN */
 function agregarPlaneacion(){
   const n = planNombre.value.trim().toLowerCase();
   if(!n)return;
@@ -221,234 +261,69 @@ function cargarInvitados(){
   });
 }
 
+/* 🔥 ESCÁNER TOTALMENTE CORREGIDO */
+let scannerInstance = null;
+
 function iniciarEscaner(){
-  const qrReader = new Html5Qrcode("reader");
 
-  qrReader.start(
-    { facingMode: "environment" },
-    { fps:10, qrbox:250 },
-    qr=>{
-      qrReader.stop();
-      marcarAsistencia(qr);
-    }
-  );
-}
+  const cont = document.getElementById("reader");
+  cont.innerHTML="";
 
-function marcarAsistencia(qr){
-  db.collection("invitados")
-  .where("qr","==",qr)
-  .get()
-  .then(res=>{
-    if(res.empty){
-      alert("QR inválido");
-      return;
-    }
+  if(scannerInstance){
+    try{scannerInstance.clear();}catch(e){}
+  }
 
-    res.forEach(doc=>{
-      const d=doc.data();
-
-      if(d.asistio){
-        alert("Ya ingresó");
-      }else{
-        doc.ref.update({asistio:true});
-        alert("Bienvenido "+d.nombre);
-      }
-    });
+  scannerInstance = new Html5QrcodeScanner("reader",{
+    fps:10,
+    qrbox:250
   });
-}
-</script>
-<script>
-/* 🔐 LOGIN / REINGRESO usando la MISMA pantalla */
 
-(function(){
+  scannerInstance.render(async (qrText)=>{
 
-  const originalRegistrar = registrar;
+    alert("QR detectado: "+qrText);
 
-  registrar = function(){
+    try{scannerInstance.clear();}catch(e){}
 
-    const nombreInput = document.getElementById("nombre").value.trim().toLowerCase();
-    const celularVal = document.getElementById("celular").value.trim();
-    const codigoVal = document.getElementById("codigo").value;
+    try{
 
-    if(!nombreInput || !celularVal){
-      msg.innerText="Completa datos";
-      msg.className="warn";
-      return;
-    }
+      const res = await db.collection("invitados")
+        .where("qr","==",qrText)
+        .get();
 
-    // ADMIN directo (también persiste)
-    if(codigoVal==="142534"){
-      localStorage.setItem("admin","true");
-      document.getElementById("registro").classList.add("hidden");
-      document.getElementById("admin").classList.remove("hidden");
-      if(typeof cargarPlaneacion==="function") cargarPlaneacion();
-      if(typeof cargarInvitados==="function") cargarInvitados();
-      return;
-    }
+      if(res.empty){
+        alert("QR inválido");
+        return;
+      }
 
-    // 🔎 Buscar si YA existe (login)
-    db.collection("invitados")
-      .where("celular","==",celularVal)
-      .get()
-      .then(res=>{
+      res.forEach(async (doc)=>{
+        const d=doc.data();
 
-        if(!res.empty){
-          // LOGIN existente
-          const doc = res.docs[0];
-          const d = doc.data();
-
-          document.getElementById("registro").classList.add("hidden");
-          document.getElementById("invitado").classList.remove("hidden");
-
-          const cont = document.getElementById("qr");
-          cont.innerHTML = "";
-
-          new QRCode(cont,{
-            text:d.qr,
-            width:160,
-            height:160
-          });
-
-          msg.innerText="Sesión recuperada";
-          msg.className="success";
-          return;
+        if(d.asistio){
+          alert("Ya ingresó: "+d.nombre);
+        }else{
+          await doc.ref.update({asistio:true});
+          alert("Bienvenido "+d.nombre);
         }
-
-        // 🆕 SI NO EXISTE → registrar normal (valida contra planeación)
-        const palabrasUsuario = nombreInput.split(" ");
-
-        db.collection("planeacion").get().then(resPlan=>{
-          let autorizado=false;
-
-          resPlan.forEach(doc=>{
-            const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
-            palabrasPlan.forEach(p=>{
-              if(palabrasUsuario.includes(p)){
-                autorizado=true;
-              }
-            });
-          });
-
-          if(!autorizado){
-            msg.innerText="No estás en lista";
-            msg.className="error";
-            return;
-          }
-
-          const qrCode = "QR-"+Math.random().toString(36).substr(2,8);
-
-          db.collection("invitados").add({
-            nombre:nombreInput,
-            celular:celularVal,
-            qr:qrCode,
-            asistio:false
-          });
-
-          document.getElementById("registro").classList.add("hidden");
-          document.getElementById("invitado").classList.remove("hidden");
-
-          const cont = document.getElementById("qr");
-          cont.innerHTML = "";
-
-          new QRCode(cont,{
-            text:qrCode,
-            width:160,
-            height:160
-          });
-
-          msg.innerText="Registro exitoso";
-          msg.className="success";
-        });
-
       });
 
-  };
-
-  // 🔁 Auto-login admin si ya había entrado
-  window.addEventListener("load", ()=>{
-    if(localStorage.getItem("admin")==="true"){
-      document.getElementById("registro").classList.add("hidden");
-      document.getElementById("admin").classList.remove("hidden");
-      if(typeof cargarPlaneacion==="function") cargarPlaneacion();
-      if(typeof cargarInvitados==="function") cargarInvitados();
+    }catch(e){
+      alert("Error: "+e.message);
     }
+
   });
 
-})();
+}
+
+/* 🔄 AUTO LOGIN ADMIN */
+window.addEventListener("load",()=>{
+  if(localStorage.getItem("admin")==="true"){
+    registro.classList.add("hidden");
+    admin.classList.remove("hidden");
+    cargarPlaneacion();
+    cargarInvitados();
+  }
+});
 </script>
-<script>
-/* 🔥 FIX COMPLETO ESCÁNER + ASISTENCIA (robusto y sin fallos comunes) */
 
-(function(){
-
-  let scannerInstance = null;
-
-  window.iniciarEscaner = function(){
-
-    const cont = document.getElementById("reader");
-
-    if(!cont){
-      alert("No existe contenedor #reader");
-      return;
-    }
-
-    // limpiar contenedor y scanner previo
-    cont.innerHTML = "";
-    if(scannerInstance){
-      try{ scannerInstance.clear(); }catch(e){}
-      scannerInstance = null;
-    }
-
-    // crear scanner más estable
-    scannerInstance = new Html5QrcodeScanner("reader", {
-      fps: 10,
-      qrbox: 250,
-      rememberLastUsedCamera: true
-    });
-
-    scannerInstance.render(async (qrText) => {
-
-      // 🔔 confirmación SIEMPRE
-      alert("QR detectado: " + qrText);
-
-      try{
-        scannerInstance.clear();
-      }catch(e){}
-
-      // 🔥 VALIDAR Y MARCAR ASISTENCIA
-      try{
-
-        const res = await db.collection("invitados")
-          .where("qr","==",qrText)
-          .get();
-
-        if(res.empty){
-          alert("QR inválido");
-          return;
-        }
-
-        res.forEach(async (doc)=>{
-
-          const data = doc.data();
-
-          if(data.asistio){
-            alert("Ya ingresó: " + data.nombre);
-          }else{
-            await doc.ref.update({asistio:true});
-            alert("Bienvenido " + data.nombre);
-          }
-
-        });
-
-      }catch(err){
-        alert("Error Firebase: " + err.message);
-      }
-
-    }, (err)=>{});
-
-  };
-
-})();
-</script>
 </body>
 </html>
