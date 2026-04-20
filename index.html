@@ -9,40 +9,62 @@
 body{
   margin:0;
   font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#020617,#0a192f,#112240);
-  color:#e0f2fe;
+  background:linear-gradient(135deg,#020617,#0a192f,#020617);
+  color:#e2e8f0;
 }
-.container{max-width:500px;margin:auto;padding:20px;}
+
+.container{
+  max-width:500px;
+  margin:auto;
+  padding:20px;
+}
+
 .card{
-  background:#0f172a;
+  background:#0b1220;
   border:1px solid #1e3a8a;
   padding:20px;
-  border-radius:15px;
+  border-radius:18px;
   margin-bottom:20px;
-  box-shadow:0 0 20px rgba(37,99,235,0.2);
+  box-shadow:0 0 25px rgba(37,99,235,0.25);
 }
+
+h2{
+  text-align:center;
+  margin-bottom:15px;
+}
+
 input,button{
   width:100%;
   padding:12px;
   margin-top:10px;
   border-radius:10px;
-  border:none;
   font-size:14px;
 }
+
 input{
   background:#020617;
-  color:#e0f2fe;
+  color:#e2e8f0;
   border:1px solid #1e3a8a;
 }
+
 button{
   background:linear-gradient(90deg,#2563eb,#1d4ed8);
   color:white;
+  border:none;
   font-weight:bold;
+  cursor:pointer;
+  transition:0.2s;
 }
-button:hover{background:#1e40af;}
-h2{margin:0 0 10px 0;text-align:center;}
+
+button:hover{
+  transform:scale(1.02);
+  box-shadow:0 0 15px rgba(37,99,235,0.5);
+}
+
 .hidden{display:none;}
+
 ul{list-style:none;padding:0;}
+
 li{
   background:#020617;
   padding:10px;
@@ -50,11 +72,19 @@ li{
   border-radius:8px;
   border:1px solid #1e3a8a;
 }
+
+#qr{
+  display:flex;
+  justify-content:center;
+  margin-top:15px;
+}
+
 #reader{
   width:100%;
   border-radius:10px;
   overflow:hidden;
 }
+
 .success{color:#22c55e;}
 .error{color:#ef4444;}
 .warn{color:#facc15;}
@@ -65,7 +95,6 @@ li{
 
 <div class="container">
 
-<!-- REGISTRO -->
 <div id="registro" class="card">
 <h2>Registro</h2>
 <input id="nombre" placeholder="Nombre completo">
@@ -75,14 +104,12 @@ li{
 <p id="msg"></p>
 </div>
 
-<!-- INVITADO -->
 <div id="invitado" class="card hidden">
 <h2>Tu QR</h2>
 <div id="qr"></div>
-<p>Haz captura de pantalla</p>
+<p style="text-align:center">Haz captura</p>
 </div>
 
-<!-- ADMIN -->
 <div id="admin" class="hidden">
 
 <div class="card">
@@ -111,14 +138,9 @@ li{
 
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<!-- QR -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<!-- Scanner -->
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
@@ -131,8 +153,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-/* 🔐 REGISTRO + LOGIN + VALIDACIÓN + QR CORREGIDO */
-function registrar(){
+/* REGISTRO */
+async function registrar(){
 
   const nombreInput = nombre.value.trim().toLowerCase();
   const celularVal = celular.value.trim();
@@ -144,7 +166,6 @@ function registrar(){
     return;
   }
 
-  // ADMIN
   if(codigoVal==="142534"){
     localStorage.setItem("admin","true");
     registro.classList.add("hidden");
@@ -154,79 +175,65 @@ function registrar(){
     return;
   }
 
-  // LOGIN existente
-  db.collection("invitados").where("celular","==",celularVal).get()
-  .then(res=>{
+  const res = await db.collection("invitados")
+    .where("celular","==",celularVal)
+    .get();
 
-    if(!res.empty){
-      const d = res.docs[0].data();
+  if(!res.empty){
+    const d = res.docs[0].data();
+    mostrarQR(d.qr);
+    msg.innerText="Sesión recuperada";
+    msg.className="success";
+    return;
+  }
 
-      registro.classList.add("hidden");
-      invitado.classList.remove("hidden");
+  const palabrasUsuario = nombreInput.split(" ");
+  const resPlan = await db.collection("planeacion").get();
 
-      const cont = document.getElementById("qr");
-      cont.innerHTML="";
+  let autorizado=false;
 
-      new QRCode(cont,{
-        text:d.qr,
-        width:160,
-        height:160
-      });
-
-      msg.innerText="Sesión recuperada";
-      msg.className="success";
-      return;
-    }
-
-    // VALIDACIÓN FLEXIBLE
-    const palabrasUsuario = nombreInput.split(" ");
-
-    db.collection("planeacion").get().then(resPlan=>{
-
-      let autorizado=false;
-
-      resPlan.forEach(doc=>{
-        const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
-        palabrasPlan.forEach(p=>{
-          if(palabrasUsuario.includes(p)){
-            autorizado=true;
-          }
-        });
-      });
-
-      if(!autorizado){
-        msg.innerText="No estás en lista";
-        msg.className="error";
-        return;
-      }
-
-      // 🔥 QR MEJORADO (único real)
-      const qrCode = "QR-"+Date.now()+"-"+Math.random().toString(36).substring(2,10);
-
-      db.collection("invitados").add({
-        nombre:nombreInput,
-        celular:celularVal,
-        qr:qrCode,
-        asistio:false
-      });
-
-      registro.classList.add("hidden");
-      invitado.classList.remove("hidden");
-
-      const cont = document.getElementById("qr");
-      cont.innerHTML="";
-
-      new QRCode(cont,{
-        text:qrCode,
-        width:160,
-        height:160
-      });
-
-      msg.innerText="Registro exitoso";
-      msg.className="success";
-
+  resPlan.forEach(doc=>{
+    const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
+    palabrasPlan.forEach(p=>{
+      if(palabrasUsuario.includes(p)) autorizado=true;
     });
+  });
 
+  if(!autorizado){
+    msg.innerText="No estás en lista";
+    msg.className="error";
+    return;
+  }
+
+  const qrCode = "QR-"+Date.now()+"-"+Math.random().toString(36).substring(2,10);
+
+  await db.collection("invitados").add({
+    nombre:nombreInput,
+    celular:celularVal,
+    qr:qrCode,
+    asistio:false
+  });
+
+  mostrarQR(qrCode);
+  msg.innerText="Registro exitoso";
+  msg.className="success";
+}
+
+/* MOSTRAR QR */
+function mostrarQR(texto){
+  registro.classList.add("hidden");
+  invitado.classList.remove("hidden");
+
+  const cont = document.getElementById("qr");
+  cont.innerHTML="";
+
+  new QRCode(cont,{
+    text:texto,
+    width:240,
+    height:240,
+    colorDark:"#000000",
+    colorLight:"#ffffff",
+    correctLevel:QRCode.CorrectLevel.H
   });
 }
 
@@ -261,32 +268,34 @@ function cargarInvitados(){
   });
 }
 
-/* 🔥 ESCÁNER TOTALMENTE CORREGIDO */
-let scannerInstance = null;
+/* ESCÁNER PRO */
+let lector=null;
 
 function iniciarEscaner(){
 
-  const cont = document.getElementById("reader");
+  const cont=document.getElementById("reader");
   cont.innerHTML="";
 
-  if(scannerInstance){
-    try{scannerInstance.clear();}catch(e){}
+  if(lector){
+    try{lector.stop();}catch(e){}
   }
 
-  scannerInstance = new Html5QrcodeScanner("reader",{
-    fps:10,
-    qrbox:250
-  });
+  lector=new Html5Qrcode("reader");
 
-  scannerInstance.render(async (qrText)=>{
+  lector.start(
+    {facingMode:"environment"},
+    {
+      fps:15,
+      qrbox:{width:280,height:280}
+    },
 
-    alert("QR detectado: "+qrText);
+    async(qrText)=>{
 
-    try{scannerInstance.clear();}catch(e){}
+      alert("QR: "+qrText);
 
-    try{
+      try{await lector.stop();}catch(e){}
 
-      const res = await db.collection("invitados")
+      const res=await db.collection("invitados")
         .where("qr","==",qrText)
         .get();
 
@@ -295,7 +304,7 @@ function iniciarEscaner(){
         return;
       }
 
-      res.forEach(async (doc)=>{
+      res.forEach(async(doc)=>{
         const d=doc.data();
 
         if(d.asistio){
@@ -306,15 +315,13 @@ function iniciarEscaner(){
         }
       });
 
-    }catch(e){
-      alert("Error: "+e.message);
     }
-
+  ).catch(err=>{
+    alert("Error cámara: "+err);
   });
-
 }
 
-/* 🔄 AUTO LOGIN ADMIN */
+/* AUTO ADMIN */
 window.addEventListener("load",()=>{
   if(localStorage.getItem("admin")==="true"){
     registro.classList.add("hidden");
@@ -324,92 +331,6 @@ window.addEventListener("load",()=>{
   }
 });
 </script>
-<script>
-/* 🔥 FIX DETECCIÓN QR + MEJOR LECTOR */
 
-(function(){
-
-  // 🔵 MEJORAR GENERACIÓN QR (alto contraste)
-  const oldQRCode = window.QRCode;
-  window.QRCode = function(el, opts){
-    el.innerHTML = "";
-    return new oldQRCode(el, {
-      text: opts.text,
-      width: 220,
-      height: 220,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-  };
-
-  // 🔴 ESCÁNER MEJORADO
-  let lector = null;
-
-  window.iniciarEscaner = function(){
-
-    const cont = document.getElementById("reader");
-    cont.innerHTML = "<p style='text-align:center'>📷 Apunta al QR...</p>";
-
-    if(lector){
-      try{ lector.stop(); }catch(e){}
-      lector = null;
-    }
-
-    lector = new Html5Qrcode("reader");
-
-    lector.start(
-      { facingMode: "environment" },
-      {
-        fps: 15,
-        qrbox: { width: 300, height: 300 },
-        formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ]
-      },
-
-      async (qrText)=>{
-
-        alert("QR detectado: " + qrText);
-
-        try{ await lector.stop(); }catch(e){}
-
-        try{
-          const res = await db.collection("invitados")
-            .where("qr","==",qrText)
-            .get();
-
-          if(res.empty){
-            alert("QR inválido");
-            return;
-          }
-
-          res.forEach(async (doc)=>{
-            const d = doc.data();
-
-            if(d.asistio){
-              alert("Ya ingresó: " + d.nombre);
-            }else{
-              await doc.ref.update({asistio:true});
-              alert("Bienvenido " + d.nombre);
-            }
-          });
-
-        }catch(err){
-          alert("Error: " + err.message);
-        }
-
-      },
-
-      (err)=>{
-        // silencio para evitar spam de errores
-      }
-
-    ).catch(err=>{
-      alert("Error cámara: " + err);
-    });
-
-  };
-
-})();
-</script>
 </body>
 </html>
