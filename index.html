@@ -5,145 +5,236 @@
 <title>Registro Evento</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Roboto:wght@400;500&amp;display=swap">
-
 <style>
-body{
-  margin:0;
-  font-family:'Roboto', system-ui, sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e2937,#0f172a);
-  color:#e0f2fe;
-  min-height:100vh;
-  position:relative;
-  overflow-x:hidden;
-}
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;display=swap');
 
-body::before{
-  content:"";
-  position:fixed;
-  top:0; left:0; right:0; bottom:0;
-  background:radial-gradient(circle at 30% 20%, rgba(59,130,246,0.15) 0%, transparent 50%),
-             radial-gradient(circle at 70% 80%, rgba(59,130,246,0.15) 0%, transparent 50%);
-  filter:blur(80px);
-  z-index:-1;
-  pointer-events:none;
-}
+    :root {
+        --blue-glow: #3b82f6;
+    }
 
-.container{
-  max-width:500px;
-  margin:auto;
-  padding:20px;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-.card{
-  background:rgba(30,41,59,0.85);
-  border:1px solid rgba(100,149,237,0.35);
-  padding:25px;
-  border-radius:24px;
-  margin-bottom:20px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.5),
-             0 0 0 1px rgba(255,255,255,0.08) inset;
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-}
+    body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e2937, #0f172a);
+        color: #f1f5f9;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
 
-h2{
-  text-align:center;
-  margin-bottom:20px;
-  font-family:'Playfair Display', serif;
-  color:#60a5fa;
-  text-shadow:0 0 15px rgba(59,130,246,0.5);
-  letter-spacing:0.5px;
-  font-size:1.55rem;
-}
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.25) 0%, transparent 50%),
+                    radial-gradient(circle at 75% 80%, rgba(59, 130, 246, 0.22) 0%, transparent 55%);
+        filter: blur(90px);
+        z-index: -1;
+        pointer-events: none;
+        animation: subtlePulse 25s ease infinite;
+    }
 
-input,button{
-  width:100%;
-  padding:14px 18px;
-  margin-top:12px;
-  border-radius:16px;
-  font-size:16px;
-  transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
-}
+    @keyframes subtlePulse {
+        0%, 100% { opacity: 0.85; }
+        50% { opacity: 1; }
+    }
 
-input{
-  background:rgba(15,23,42,0.9);
-  color:#e0f2fe;
-  border:1.5px solid rgba(100,149,237,0.4);
-  font-family:'Roboto', sans-serif;
-}
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 24px 20px;
+    }
 
-input:focus{
-  border-color:#3b82f6;
-  box-shadow:0 0 0 3px rgba(59,130,246,0.3);
-  outline:none;
-}
+    .card {
+        background: rgba(30, 41, 59, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 28px;
+        padding: 28px 24px;
+        margin-bottom: 24px;
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+            0 0 25px rgba(59, 130, 246, 0.18);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-button{
-  background:linear-gradient(90deg,#1e40af,#3b82f6);
-  color:#ffffff;
-  border:none;
-  font-weight:600;
-  cursor:pointer;
-  box-shadow:0 6px 16px rgba(59,130,246,0.4);
-}
+    h2 {
+        text-align: center;
+        font-size: 1.65rem;
+        font-weight: 500;
+        color: #f1f5f9;
+        margin-bottom: 24px;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    }
 
-button:hover{
-  transform:scale(1.04);
-  box-shadow:0 10px 25px rgba(59,130,246,0.5);
-}
+    input {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1.5px solid rgba(148, 163, 184, 0.35);
+        border-radius: 18px;
+        padding: 16px 20px;
+        font-size: 17px;
+        color: #f1f5f9;
+        margin-bottom: 14px;
+        transition: all 0.25s ease;
+        font-family: 'Inter', system-ui, sans-serif;
+    }
 
-.hidden{display:none;}
+    input:focus {
+        border-color: var(--blue-glow);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+        outline: none;
+    }
 
-ul{list-style:none;padding:0;margin:0;}
+    button {
+        width: 100%;
+        background: linear-gradient(90deg, #1e40af, #3b82f6);
+        color: white;
+        border: none;
+        border-radius: 18px;
+        padding: 16px 20px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-top: 8px;
+    }
 
-li{
-  background:rgba(15,23,42,0.85);
-  padding:14px 16px;
-  margin-top:10px;
-  border-radius:14px;
-  border:1px solid rgba(100,149,237,0.3);
-  color:#e0f2fe;
-  box-shadow:0 4px 12px rgba(0,0,0,0.3);
-  font-size:15px;
-}
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(59, 130, 246, 0.55);
+    }
 
-#qr{
-  display:flex;
-  justify-content:center;
-  margin-top:15px;
-  padding:20px;
-  background:rgba(15,23,42,0.9);
-  border-radius:20px;
-  border:1px solid rgba(100,149,237,0.4);
-  box-shadow:0 8px 25px rgba(59,130,246,0.2);
-  backdrop-filter:blur(12px);
-}
+    button:active {
+        transform: scale(0.98);
+    }
 
-#reader{
-  width:100%;
-  min-height:340px;
-  border-radius:20px;
-  overflow:hidden;
-  border:3px solid rgba(59,130,246,0.6);
-  box-shadow:0 0 25px rgba(59,130,246,0.4);
-  background:#0f172a;
-  backdrop-filter:blur(8px);
-}
+    .hidden { display: none !important; }
 
-.success{color:#4ade80;}
-.error{color:#f87171;}
-.warn{color:#fb923c;}
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-.status{
-  text-align:center;
-  margin-top:12px;
-  padding:10px 16px;
-  border-radius:12px;
-  font-weight:500;
-  background:rgba(15,23,42,0.6);
-  border:1px solid rgba(100,149,237,0.3);
-}
+    li {
+        background: rgba(15, 23, 42, 0.85);
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        font-size: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(12px);
+    }
+
+    #qr {
+        display: flex;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 24px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        margin-top: 12px;
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+        backdrop-filter: blur(16px);
+    }
+
+    #reader {
+        width: 100%;
+        min-height: 360px;
+        border-radius: 28px;
+        overflow: hidden;
+        border: 4px solid rgba(59, 130, 246, 0.6);
+        box-shadow: 0 0 35px rgba(59, 130, 246, 0.45);
+        background: #0f172a;
+        position: relative;
+    }
+
+    #reader::after {
+        content: "Apunta el QR al centro";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(255,255,255,0.75);
+        font-size: 15px;
+        font-weight: 500;
+        text-align: center;
+        width: 100%;
+        pointer-events: none;
+        z-index: 10;
+        text-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+    }
+
+    .status {
+        text-align: center;
+        margin-top: 14px;
+        padding: 14px 20px;
+        border-radius: 18px;
+        font-size: 16px;
+        font-weight: 500;
+        background: rgba(15, 23, 42, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .success { color: #22c55e; }
+    .error { color: #ef4444; }
+    .warn { color: #f59e0b; }
+
+    /* Scan result panel - iOS glass style */
+    #scanResult {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        background: rgba(30, 41, 59, 0.92);
+        border-radius: 28px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5),
+                    0 0 0 1px rgba(255,255,255,0.1) inset;
+        backdrop-filter: blur(32px);
+        -webkit-backdrop-filter: blur(32px);
+        padding: 24px;
+        z-index: 9999;
+        max-width: 460px;
+        margin: 0 auto;
+        animation: slideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .scan-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #f1f5f9;
+    }
+
+    .qr-detected {
+        background: rgba(15, 23, 42, 0.9);
+        padding: 16px;
+        border-radius: 18px;
+        font-family: monospace;
+        font-size: 15px;
+        word-break: break-all;
+        margin-bottom: 20px;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+    }
 </style>
 </head>
 
@@ -151,51 +242,66 @@ li{
 
 <div class="container">
 
-<div id="registro" class="card">
-<h2>Registro</h2>
-<input id="nombre" placeholder="Nombre completo">
-<input id="celular" placeholder="Celular">
-<input id="codigo" placeholder="Código admin (opcional)">
-<button onclick="registrar()">Continuar</button>
-<p id="msg" class="status"></p>
+    <!-- REGISTRO -->
+    <div id="registro" class="card">
+        <h2>Registro</h2>
+        <input id="nombre" placeholder="Nombre completo" autocomplete="off">
+        <input id="celular" placeholder="Celular" type="tel" autocomplete="off">
+        <input id="codigo" placeholder="Código admin (opcional)" autocomplete="off">
+        <button onclick="registrar()">Continuar</button>
+        <p id="msg" class="status"></p>
+    </div>
+
+    <!-- INVITADO QR -->
+    <div id="invitado" class="card hidden">
+        <h2>Tu código QR</h2>
+        <div id="qr"></div>
+        <p style="text-align:center; margin-top:16px; font-size:15px; color:#94a3b8;">Mantén presionado para guardar</p>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="admin" class="hidden">
+
+        <div class="card">
+            <h2>Agregar a Planeación</h2>
+            <input id="planNombre" placeholder="Nombre">
+            <button onclick="agregarPlaneacion()">Agregar</button>
+        </div>
+
+        <div class="card">
+            <h2>Planeación</h2>
+            <ul id="listaPlan"></ul>
+        </div>
+
+        <div class="card">
+            <h2>Registrados</h2>
+            <ul id="listaInvitados"></ul>
+        </div>
+
+        <!-- ESCANER -->
+        <div class="card">
+            <h2>Escanear QR</h2>
+            
+            <div style="display:flex; gap:12px; margin-bottom:20px;">
+                <button onclick="iniciarEscaner()" style="flex:1;">📸 Abrir cámara</button>
+                <button onclick="detenerEscaner()" style="flex:1; background:rgba(15,23,42,0.9); border:1px solid rgba(148,163,184,0.4);">⏹ Detener</button>
+            </div>
+
+            <div id="reader"></div>
+            <p id="scanMsg" class="status">La cámara se activará aquí</p>
+        </div>
+
+    </div>
+
 </div>
 
-<div id="invitado" class="card hidden">
-<h2>Tu QR</h2>
-<div id="qr"></div>
-<p style="text-align:center; color:#60a5fa; margin-top:12px; font-family:'Playfair Display', serif; font-size:1.1rem;">Captura de pantalla</p>
-</div>
-
-<div id="admin" class="hidden">
-
-<div class="card">
-<h2>Agregar a Planeación</h2>
-<input id="planNombre" placeholder="Nombre">
-<button onclick="agregarPlaneacion()">Agregar</button>
-</div>
-
-<div class="card">
-<h2>Planeación</h2>
-<ul id="listaPlan"></ul>
-</div>
-
-<div class="card">
-<h2>Registrados</h2>
-<ul id="listaInvitados"></ul>
-</div>
-
-<div class="card">
-<h2>Escanear QR</h2>
-<div style="display:flex; gap:12px; margin-bottom:18px;">
-<button onclick="iniciarEscaner()" style="flex:1;">📷 Abrir cámara</button>
-<button onclick="detenerEscaner()" style="flex:1; background:rgba(30,41,59,0.9); color:#e0f2fe; border:1px solid rgba(100,149,237,0.4);">⏹ Detener</button>
-</div>
-<div id="reader"></div>
-<p id="scanMsg" class="status"></p>
-</div>
-
-</div>
-
+<!-- PANEL DE CONFIRMACIÓN DE ESCANEO (botón manual) -->
+<div id="scanResult" class="hidden">
+    <div class="scan-title">Código QR detectado</div>
+    <div id="qrDetectedText" class="qr-detected"></div>
+    
+    <button onclick="procesarEscaneo()" style="margin-bottom:12px;">✅ Marcar asistencia</button>
+    <button onclick="cancelarEscaneo()" style="background:rgba(15,23,42,0.9); border:1px solid rgba(148,163,184,0.4);">Cancelar</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -204,236 +310,262 @@ li{
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAWyE5VZXL5j4iFdOQoVRQ-2_DB0Eo3f6U",
-  authDomain: "fiesta-qr-55d9a.firebaseapp.com",
-  projectId: "fiesta-qr-55d9a"
-};
+    // === CONFIG FIREBASE ===
+    const firebaseConfig = {
+        apiKey: "AIzaSyAWyE5VZXL5j4iFdOQoVRQ-2_DB0Eo3f6U",
+        authDomain: "fiesta-qr-55d9a.firebaseapp.com",
+        projectId: "fiesta-qr-55d9a"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+    // === ELEMENTOS GLOBALES ===
+    let lector = null;
+    let currentQrText = null;
 
-/* REGISTRO */
-async function registrar(){
+    // === REGISTRO (QR ahora es el nombre completo en minúsculas) ===
+    async function registrar() {
+        const nombreInput = document.getElementById('nombre').value.trim().toLowerCase();
+        const celularVal = document.getElementById('celular').value.trim();
+        const codigoVal = document.getElementById('codigo').value.trim();
+        const msg = document.getElementById('msg');
 
-  const nombreInput = nombre.value.trim().toLowerCase();
-  const celularVal = celular.value.trim();
-  const codigoVal = codigo.value;
+        if (!nombreInput || !celularVal) {
+            msg.innerHTML = 'Completa todos los datos';
+            msg.className = 'status error';
+            return;
+        }
 
-  if(!nombreInput || !celularVal){
-    msg.innerText="Completa datos";
-    msg.className="warn status";
-    return;
-  }
+        // Código admin
+        if (codigoVal === "142534") {
+            localStorage.setItem("admin", "true");
+            document.getElementById('registro').classList.add('hidden');
+            document.getElementById('admin').classList.remove('hidden');
+            cargarPlaneacion();
+            cargarInvitados();
+            return;
+        }
 
-  if(codigoVal==="142534"){
-    localStorage.setItem("admin","true");
-    registro.classList.add("hidden");
-    admin.classList.remove("hidden");
-    cargarPlaneacion();
-    cargarInvitados();
-    return;
-  }
+        // Recuperar por celular
+        const res = await db.collection("invitados").where("celular", "==", celularVal).get();
+        if (!res.empty) {
+            const d = res.docs[0].data();
+            mostrarQR(d.qr);
+            msg.innerHTML = 'Sesión recuperada';
+            msg.className = 'status success';
+            return;
+        }
 
-  const res = await db.collection("invitados")
-    .where("celular","==",celularVal)
-    .get();
+        // Verificar planeación
+        const palabrasUsuario = nombreInput.split(" ");
+        const resPlan = await db.collection("planeacion").get();
+        let autorizado = false;
 
-  if(!res.empty){
-    const d = res.docs[0].data();
-    mostrarQR(d.qr);
-    msg.innerText="Sesión recuperada";
-    msg.className="success status";
-    return;
-  }
+        resPlan.forEach(doc => {
+            const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
+            palabrasPlan.forEach(p => {
+                if (palabrasUsuario.includes(p)) autorizado = true;
+            });
+        });
 
-  const palabrasUsuario = nombreInput.split(" ");
-  const resPlan = await db.collection("planeacion").get();
+        if (!autorizado) {
+            msg.innerHTML = 'No estás en la lista de planeación';
+            msg.className = 'status error';
+            return;
+        }
 
-  let autorizado=false;
+        // QR = nombre completo (como pidió el usuario)
+        const qrCode = nombreInput;
 
-  resPlan.forEach(doc=>{
-    const palabrasPlan = doc.data().nombre.toLowerCase().split(" ");
-    palabrasPlan.forEach(p=>{
-      if(palabrasUsuario.includes(p)) autorizado=true;
-    });
-  });
+        await db.collection("invitados").add({
+            nombre: nombreInput,
+            celular: celularVal,
+            qr: qrCode,
+            asistio: false
+        });
 
-  if(!autorizado){
-    msg.innerText="No estás en lista";
-    msg.className="error status";
-    return;
-  }
+        mostrarQR(qrCode);
+        msg.innerHTML = 'Registro exitoso';
+        msg.className = 'status success';
+    }
 
-  const qrCode = "QR-"+Date.now()+"-"+Math.random().toString(36).substring(2,10);
+    // === MOSTRAR QR ===
+    function mostrarQR(texto) {
+        document.getElementById('registro').classList.add('hidden');
+        const invitadoCard = document.getElementById('invitado');
+        invitadoCard.classList.remove('hidden');
 
-  await db.collection("invitados").add({
-    nombre:nombreInput,
-    celular:celularVal,
-    qr:qrCode,
-    asistio:false
-  });
+        const cont = document.getElementById('qr');
+        cont.innerHTML = "";
 
-  mostrarQR(qrCode);
-  msg.innerText="Registro exitoso";
-  msg.className="success status";
-}
+        new QRCode(cont, {
+            text: texto,
+            width: 280,
+            height: 280,
+            colorDark: "#0f172a",
+            colorLight: "#f1f5f9",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
 
-/* MOSTRAR QR */
-function mostrarQR(texto){
-  registro.classList.add("hidden");
-  invitado.classList.remove("hidden");
+    // === ADMIN ===
+    function agregarPlaneacion() {
+        const n = document.getElementById('planNombre').value.trim().toLowerCase();
+        if (!n) return;
+        db.collection("planeacion").add({ nombre: n });
+        document.getElementById('planNombre').value = "";
+    }
 
-  const cont = document.getElementById("qr");
-  cont.innerHTML="";
+    function cargarPlaneacion() {
+        db.collection("planeacion").onSnapshot(snap => {
+            const lista = document.getElementById('listaPlan');
+            lista.innerHTML = "";
+            snap.forEach(doc => {
+                const li = document.createElement('li');
+                li.innerText = doc.data().nombre;
+                lista.appendChild(li);
+            });
+        });
+    }
 
-  new QRCode(cont,{
-    text:texto,
-    width:260,
-    height:260,
-    colorDark:"#0f172a",
-    colorLight:"#e0f2fe",
-    correctLevel:QRCode.CorrectLevel.H
-  });
-}
+    function cargarInvitados() {
+        db.collection("invitados").onSnapshot(snap => {
+            const lista = document.getElementById('listaInvitados');
+            lista.innerHTML = "";
+            snap.forEach(doc => {
+                const d = doc.data();
+                const li = document.createElement('li');
+                li.innerText = `${d.nombre} | ${d.celular} | ${d.asistio ? '✔' : '❌'}`;
+                lista.appendChild(li);
+            });
+        });
+    }
 
-/* ADMIN */
-function agregarPlaneacion(){
-  const n = planNombre.value.trim().toLowerCase();
-  if(!n) return;
-  db.collection("planeacion").add({nombre:n});
-  planNombre.value="";
-}
+    // === ESCANER CON BOTÓN MANUAL (como solicitaste) ===
+    async function iniciarEscaner() {
+        const reader = document.getElementById('reader');
+        const scanMsg = document.getElementById('scanMsg');
+        
+        reader.innerHTML = "";
+        scanMsg.innerHTML = "Iniciando cámara...";
+        scanMsg.className = "status";
 
-function cargarPlaneacion(){
-  db.collection("planeacion").onSnapshot(snap=>{
-    listaPlan.innerHTML="";
-    snap.forEach(doc=>{
-      const li=document.createElement("li");
-      li.innerText=doc.data().nombre;
-      listaPlan.appendChild(li);
-    });
-  });
-}
+        if (lector) {
+            try { await lector.stop(); } catch(e) {}
+            lector = null;
+        }
 
-function cargarInvitados(){
-  db.collection("invitados").onSnapshot(snap=>{
-    listaInvitados.innerHTML="";
-    snap.forEach(doc=>{
-      const d=doc.data();
-      const li=document.createElement("li");
-      li.innerText=d.nombre+" | "+d.celular+" | "+(d.asistio?"✔":"❌");
-      listaInvitados.appendChild(li);
-    });
-  });
-}
+        lector = new Html5Qrcode("reader");
 
-/* ESCÁNER CORREGIDO - Ahora SÍ actualiza Firebase */
-let lector = null;
+        try {
+            await lector.start(
+                { facingMode: "environment" },
+                { 
+                    fps: 20, 
+                    qrbox: { width: 280, height: 280 },
+                    aspectRatio: 1.0
+                },
+                (qrText) => {
+                    // QR detectado → pausamos y mostramos panel con botón
+                    console.log("✅ QR detectado:", qrText);
+                    currentQrText = qrText;
+                    
+                    lector.stop().catch(() => {});
+                    mostrarPanelConfirmacion(qrText);
+                },
+                (error) => {
+                    // Solo ruido de cámara, no mostramos nada
+                }
+            );
 
-async function iniciarEscaner(){
-  const cont = document.getElementById("reader");
-  const scanMsg = document.getElementById("scanMsg");
-  
-  cont.innerHTML = "";
-  scanMsg.innerHTML = "📷 Iniciando cámara...";
-  scanMsg.className = "status";
+            scanMsg.innerHTML = "📸 Cámara lista<br><small>Apunta al QR</small>";
+            scanMsg.className = "status";
 
-  if(lector){
-    try{ await lector.stop(); }catch(e){}
-    lector = null;
-  }
+        } catch (err) {
+            console.error(err);
+            scanMsg.innerHTML = `Error al abrir cámara: ${err.message}<br><small>La página debe estar en HTTPS (Vercel)</small>`;
+            scanMsg.className = "status error";
+        }
+    }
 
-  lector = new Html5Qrcode("reader");
+    function mostrarPanelConfirmacion(qrText) {
+        const panel = document.getElementById('scanResult');
+        document.getElementById('qrDetectedText').innerHTML = `<strong>Nombre:</strong><br>${qrText}`;
+        panel.classList.remove('hidden');
+    }
 
-  try {
-    await lector.start(
-      { facingMode: "environment" },
-      {
-        fps: 20,
-        qrbox: { width: 260, height: 260 },
-        aspectRatio: 1.0
-      },
-      
-      /* === CALLBACK CUANDO SE DETECTA UN QR === */
-      async (qrText) => {
-        console.log("✅ QR detectado:", qrText); // Para que veas en consola que sí llega
+    // === BOTÓN QUE ENVÍA LA SOLICITUD AL FIREBASE ===
+    async function procesarEscaneo() {
+        const panel = document.getElementById('scanResult');
+        const scanMsg = document.getElementById('scanMsg');
+        
+        panel.classList.add('hidden');
 
-        scanMsg.innerHTML = `🔍 QR detectado<br><small>${qrText}</small>`;
+        if (!currentQrText) return;
+
+        scanMsg.innerHTML = "Buscando en Firebase...";
         scanMsg.className = "status";
 
         try {
-          const res = await db.collection("invitados")
-            .where("qr", "==", qrText)
-            .get();
+            const res = await db.collection("invitados")
+                .where("nombre", "==", currentQrText)
+                .get();
 
-          if (res.empty) {
-            scanMsg.innerHTML = "❌ QR inválido";
-            scanMsg.className = "error status";
-            setTimeout(() => { scanMsg.innerHTML = ""; }, 2200);
-            return;
-          }
+            if (res.empty) {
+                scanMsg.innerHTML = "❌ No se encontró ese nombre";
+                scanMsg.className = "status error";
+                setTimeout(() => { iniciarEscaner(); }, 2500);
+                return;
+            }
 
-          const docSnap = res.docs[0];
-          const d = docSnap.data();
+            const docSnap = res.docs[0];
+            const data = docSnap.data();
 
-          if (d.asistio === true) {
-            scanMsg.innerHTML = `⚠️ Ya ingresó: ${d.nombre}`;
-            scanMsg.className = "warn status";
-          } else {
-            // ← AQUÍ SE ACTUALIZA FIREBASE (false → true)
-            await docSnap.ref.update({ asistio: true });
-            console.log("✅ Actualizado en Firebase - asistio: true");
+            if (data.asistio === true) {
+                scanMsg.innerHTML = `⚠️ Ya había ingresado: ${data.nombre}`;
+                scanMsg.className = "status warn";
+            } else {
+                await docSnap.ref.update({ asistio: true });
+                console.log("✅ Firebase actualizado - asistio: true para", currentQrText);
+                scanMsg.innerHTML = `✅ Asistencia marcada<br><strong>${data.nombre}</strong>`;
+                scanMsg.className = "status success";
+            }
 
-            scanMsg.innerHTML = `✅ Bienvenido ${d.nombre}<br><small>Actualizado en Firebase</small>`;
-            scanMsg.className = "success status";
-          }
-
-          setTimeout(() => { scanMsg.innerHTML = "✅ Cámara lista - Escanea siguiente QR"; }, 2800);
+            setTimeout(() => { iniciarEscaner(); }, 2800);
 
         } catch (err) {
-          console.error("❌ Error Firebase:", err);
-          scanMsg.innerHTML = `❌ Error al actualizar Firebase:<br>${err.message}`;
-          scanMsg.className = "error status";
-          setTimeout(() => { scanMsg.innerHTML = ""; }, 4500);
+            console.error(err);
+            scanMsg.innerHTML = `Error Firebase: ${err.message}`;
+            scanMsg.className = "status error";
+            setTimeout(() => { iniciarEscaner(); }, 3000);
         }
-      },
+    }
 
-      /* No mostrar nada cuando no hay QR (solo ruido normal) */
-      () => {}
-    );
+    function cancelarEscaneo() {
+        const panel = document.getElementById('scanResult');
+        panel.classList.add('hidden');
+        iniciarEscaner(); // reanudar cámara
+    }
 
-    // Cámara iniciada correctamente
-    scanMsg.innerHTML = "✅ Cámara lista - Escanea un QR";
-    scanMsg.className = "status";
+    function detenerEscaner() {
+        if (lector) {
+            try { lector.stop(); } catch(e) {}
+            lector = null;
+        }
+        document.getElementById('reader').innerHTML = "";
+        document.getElementById('scanMsg').innerHTML = "Cámara detenida";
+        document.getElementById('scanResult').classList.add('hidden');
+    }
 
-  } catch (err) {
-    console.error("Error al iniciar cámara:", err);
-    scanMsg.innerHTML = `❌ No se pudo abrir la cámara:<br>${err.message}<br><small>¿Permiso denegado o página no en HTTPS?</small>`;
-    scanMsg.className = "error status";
-  }
-}
-
-function detenerEscaner(){
-  if(lector){
-    try{ lector.stop(); }catch(e){}
-    lector = null;
-  }
-  const cont = document.getElementById("reader");
-  cont.innerHTML = "";
-  const scanMsg = document.getElementById("scanMsg");
-  scanMsg.innerHTML = "";
-}
-
-/* AUTO ADMIN */
-window.addEventListener("load",()=>{
-  if(localStorage.getItem("admin")==="true"){
-    registro.classList.add("hidden");
-    admin.classList.remove("hidden");
-    cargarPlaneacion();
-    cargarInvitados();
-  }
-});
+    // === AUTO ADMIN ===
+    window.addEventListener("load", () => {
+        if (localStorage.getItem("admin") === "true") {
+            document.getElementById('registro').classList.add('hidden');
+            document.getElementById('admin').classList.remove('hidden');
+            cargarPlaneacion();
+            cargarInvitados();
+        }
+    });
 </script>
 
 </body>
