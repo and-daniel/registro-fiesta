@@ -10,35 +10,29 @@
 
     :root {
         --ios-blue: #0a84ff;
-        --glass-bg: rgba(30, 41, 59, 0.68);
+        --glass: rgba(20, 25, 40, 0.78);
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        background: linear-gradient(135deg, #0f172a, #1e2937, #0f172a);
+        background: linear-gradient(135deg, #0a1428, #1a2338, #0a1428);
         color: #f1f5f9;
         min-height: 100vh;
-        overflow-x: hidden;
         position: relative;
+        overflow-x: hidden;
     }
 
     body::before {
         content: "";
         position: fixed;
         inset: 0;
-        background: radial-gradient(circle at 30% 20%, rgba(10, 132, 255, 0.28) 0%, transparent 55%),
-                    radial-gradient(circle at 70% 85%, rgba(10, 132, 255, 0.25) 0%, transparent 60%);
+        background: radial-gradient(circle at 30% 20%, rgba(10, 132, 255, 0.32) 0%, transparent 55%),
+                    radial-gradient(circle at 75% 80%, rgba(10, 132, 255, 0.28) 0%, transparent 60%);
         filter: blur(100px);
         z-index: -1;
         pointer-events: none;
-        animation: iosGlow 18s ease infinite;
-    }
-
-    @keyframes iosGlow {
-        0%, 100% { opacity: 0.9; }
-        50% { opacity: 1; }
     }
 
     .container {
@@ -48,43 +42,40 @@
     }
 
     .card {
-        background: var(--glass-bg);
-        border: 1px solid rgba(148, 163, 184, 0.22);
-        border-radius: 28px;
-        padding: 28px 24px;
+        background: var(--glass);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 26px;
+        padding: 26px 22px;
         margin-bottom: 24px;
-        box-shadow: 
-            0 12px 40px rgba(0, 0, 0, 0.45),
-            0 0 0 1px rgba(255,255,255,0.1) inset,
-            0 0 30px rgba(10, 132, 255, 0.22);
-        backdrop-filter: blur(32px);
-        -webkit-backdrop-filter: blur(32px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.45),
+                    0 0 0 1px rgba(255,255,255,0.09) inset;
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
     }
 
     h2 {
         text-align: center;
-        font-size: 1.7rem;
+        font-size: 1.75rem;
         font-weight: 600;
         letter-spacing: -0.8px;
         color: #f1f5f9;
-        margin-bottom: 26px;
-        text-shadow: 0 0 22px rgba(10, 132, 255, 0.5);
+        margin-bottom: 24px;
+        text-shadow: 0 0 20px rgba(10, 132, 255, 0.5);
     }
 
     input {
         width: 100%;
-        background: rgba(15, 23, 42, 0.75);
+        background: rgba(15, 23, 42, 0.85);
         border: 1.5px solid rgba(148, 163, 184, 0.3);
         border-radius: 18px;
         padding: 16px 20px;
         font-size: 17px;
         color: #f1f5f9;
         margin-bottom: 14px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     input:focus {
-        border-color: var(--ios-blue);
+        border-color: #0a84ff;
         box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.3);
         outline: none;
     }
@@ -101,19 +92,21 @@
         margin-top: 8px;
     }
 
-    /* iOS glass buttons */
     .btn-primary {
         background: linear-gradient(90deg, #0a84ff, #3b9eff);
         color: white;
         box-shadow: 0 8px 22px rgba(10, 132, 255, 0.45);
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(10, 132, 255, 0.6); }
 
     .btn-secondary {
-        background: rgba(15, 23, 42, 0.85);
+        background: rgba(15, 23, 42, 0.9);
         color: #f1f5f9;
         border: 1px solid rgba(148, 163, 184, 0.35);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(10, 132, 255, 0.55);
     }
 
     .hidden { display: none !important; }
@@ -121,104 +114,52 @@
     ul { list-style: none; padding: 0; margin: 0; }
 
     li {
-        background: rgba(15, 23, 42, 0.75);
+        background: rgba(15, 23, 42, 0.85);
         padding: 16px 20px;
         margin-bottom: 12px;
         border-radius: 18px;
         border: 1px solid rgba(148, 163, 184, 0.25);
         font-size: 16px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(14px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     #qr {
         display: flex;
         justify-content: center;
-        padding: 26px;
-        background: rgba(15, 23, 42, 0.85);
-        border-radius: 26px;
+        padding: 24px;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 24px;
         border: 1px solid rgba(148, 163, 184, 0.3);
-        margin-top: 12px;
         box-shadow: 0 0 32px rgba(10, 132, 255, 0.3);
-        backdrop-filter: blur(18px);
+        backdrop-filter: blur(20px);
     }
 
-    /* READER - iOS glass + exact look from your screenshot */
     #reader {
         width: 100%;
         min-height: 380px;
-        border-radius: 28px;
+        border-radius: 26px;
         overflow: hidden;
-        border: 5px solid rgba(10, 132, 255, 0.65);
-        box-shadow: 
-            0 0 40px rgba(10, 132, 255, 0.55),
-            0 0 0 1px rgba(255,255,255,0.15) inset;
-        background: #0f172a;
+        border: 6px solid #0a84ff;
+        box-shadow: 0 0 45px rgba(10, 132, 255, 0.6),
+                    0 0 0 1px rgba(255,255,255,0.12) inset;
+        background: #0a1428;
         position: relative;
-        backdrop-filter: blur(12px);
     }
 
-    #reader::after {
+    #reader::before {
         content: "Apunta el QR al centro";
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: rgba(241, 245, 249, 0.85);
+        color: rgba(241, 245, 249, 0.9);
         font-size: 15px;
         font-weight: 500;
-        text-align: center;
-        width: 100%;
+        text-shadow: 0 0 18px #0a84ff;
         z-index: 10;
-        text-shadow: 0 0 18px rgba(10, 132, 255, 0.9);
         pointer-events: none;
-    }
-
-    /* Scanner corners - iOS style */
-    #reader::before {
-        content: "";
-        position: absolute;
-        top: 38px;
-        left: 38px;
-        width: 52px;
-        height: 52px;
-        border-top: 6px solid var(--ios-blue);
-        border-left: 6px solid var(--ios-blue);
-        border-radius: 12px;
-        z-index: 20;
-        box-shadow: 0 0 18px rgba(10, 132, 255, 0.8);
-    }
-    #reader::after {
-        content: "";
-        position: absolute;
-        top: 38px;
-        right: 38px;
-        width: 52px;
-        height: 52px;
-        border-top: 6px solid var(--ios-blue);
-        border-right: 6px solid var(--ios-blue);
-        border-radius: 12px;
-        z-index: 20;
-        box-shadow: 0 0 18px rgba(10, 132, 255, 0.8);
-    }
-    #reader .bottom-left::before, #reader .bottom-right::before {
-        content: "";
-        position: absolute;
-        bottom: 38px;
-        left: 38px;
-        width: 52px;
-        height: 52px;
-        border-bottom: 6px solid var(--ios-blue);
-        border-left: 6px solid var(--ios-blue);
-        border-radius: 12px;
-        z-index: 20;
-        box-shadow: 0 0 18px rgba(10, 132, 255, 0.8);
-    }
-    #reader .bottom-right::before {
-        left: auto;
-        right: 38px;
-        border-right: 6px solid var(--ios-blue);
-        border-bottom: 6px solid var(--ios-blue);
     }
 
     .status {
@@ -228,50 +169,13 @@
         border-radius: 18px;
         font-size: 16px;
         font-weight: 500;
-        background: rgba(15, 23, 42, 0.75);
+        background: rgba(15, 23, 42, 0.8);
         border: 1px solid rgba(148, 163, 184, 0.3);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }
 
     .success { color: #22c55e; }
     .error { color: #ef4444; }
     .warn { color: #fbbf24; }
-
-    /* CONFIRMATION PANEL - iOS notification style */
-    #scanResult {
-        position: fixed;
-        bottom: 24px;
-        left: 20px;
-        right: 20px;
-        background: rgba(30, 41, 59, 0.95);
-        border-radius: 28px;
-        border: 1px solid rgba(148, 163, 184, 0.3);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6),
-                    0 0 0 1px rgba(255,255,255,0.12) inset;
-        backdrop-filter: blur(40px);
-        -webkit-backdrop-filter: blur(40px);
-        padding: 28px 24px;
-        z-index: 99999;
-        max-width: 460px;
-        margin: 0 auto;
-        animation: iosSlideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-
-    @keyframes iosSlideUp {
-        from { transform: translateY(120px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    .qr-detected {
-        background: rgba(15, 23, 42, 0.9);
-        padding: 18px;
-        border-radius: 18px;
-        font-size: 17px;
-        word-break: break-all;
-        margin-bottom: 22px;
-        border: 1px solid rgba(10, 132, 255, 0.4);
-        font-weight: 500;
-    }
 </style>
 </head>
 
@@ -282,18 +186,18 @@
     <!-- REGISTRO -->
     <div id="registro" class="card">
         <h2>Registro</h2>
-        <input id="nombre" placeholder="Nombre completo" autocomplete="off">
-        <input id="celular" placeholder="Celular" type="tel" autocomplete="off">
-        <input id="codigo" placeholder="Código admin (opcional)" autocomplete="off">
+        <input id="nombre" placeholder="Nombre completo">
+        <input id="celular" placeholder="Celular">
+        <input id="codigo" placeholder="Código admin (opcional)">
         <button onclick="registrar()" class="btn-primary">Continuar</button>
         <p id="msg" class="status"></p>
     </div>
 
     <!-- INVITADO QR -->
     <div id="invitado" class="card hidden">
-        <h2>Tu código QR</h2>
+        <h2>Tu QR</h2>
         <div id="qr"></div>
-        <p style="text-align:center; margin-top:18px; font-size:15px; color:#94a3b8;">Mantén presionado para guardar imagen</p>
+        <p style="text-align:center; margin-top:16px; font-size:15px; color:#94a3b8;">Haz captura de pantalla</p>
     </div>
 
     <!-- ADMIN -->
@@ -315,17 +219,13 @@
             <ul id="listaInvitados"></ul>
         </div>
 
-        <!-- ESCANEAR QR - EXACTO como tu captura -->
+        <!-- ESCANEAR QR -->
         <div class="card">
             <h2>Escanear QR</h2>
             
             <div style="display:flex; gap:14px; margin-bottom:22px;">
-                <button onclick="iniciarEscaner()" class="btn-primary" style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px;">
-                    📸 Abrir cámara
-                </button>
-                <button onclick="detenerEscaner()" class="btn-secondary" style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px;">
-                    ⏹ Detener
-                </button>
+                <button onclick="iniciarEscaner()" class="btn-primary" style="flex:1;">📸 Abrir cámara</button>
+                <button onclick="detenerEscaner()" class="btn-secondary" style="flex:1;">⏹ Detener</button>
             </div>
 
             <div id="reader"></div>
@@ -334,15 +234,6 @@
 
     </div>
 
-</div>
-
-<!-- PANEL DE CONFIRMACIÓN CON BOTÓN (exacto como pediste) -->
-<div id="scanResult" class="hidden">
-    <div style="font-size:18px; font-weight:600; margin-bottom:12px; text-align:center;">QR detectado</div>
-    <div id="qrDetectedText" class="qr-detected"></div>
-    
-    <button onclick="procesarEscaneo()" class="btn-primary" style="margin-bottom:14px;">✅ Marcar como asistió</button>
-    <button onclick="cancelarEscaneo()" class="btn-secondary">Cancelar</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -356,13 +247,14 @@
         authDomain: "fiesta-qr-55d9a.firebaseapp.com",
         projectId: "fiesta-qr-55d9a"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     let lector = null;
     let currentQrText = null;
 
-    /* REGISTRO - QR = nombre completo (minúsculas) */
+    /* ===================== REGISTRO ===================== */
     async function registrar() {
         const nombreInput = document.getElementById('nombre').value.trim().toLowerCase();
         const celularVal = document.getElementById('celular').value.trim();
@@ -402,12 +294,12 @@
         });
 
         if (!autorizado) {
-            msg.innerHTML = 'No estás en la lista de planeación';
+            msg.innerHTML = 'No estás en la lista';
             msg.className = 'status error';
             return;
         }
 
-        const qrCode = nombreInput;   // ← QR es el nombre (como pediste)
+        const qrCode = nombreInput;   // QR = nombre completo (funciona siempre)
 
         await db.collection("invitados").add({
             nombre: nombreInput,
@@ -423,20 +315,20 @@
 
     function mostrarQR(texto) {
         document.getElementById('registro').classList.add('hidden');
-        const invitadoCard = document.getElementById('invitado');
-        invitadoCard.classList.remove('hidden');
+        document.getElementById('invitado').classList.remove('hidden');
         const cont = document.getElementById('qr');
         cont.innerHTML = "";
         new QRCode(cont, {
             text: texto,
             width: 280,
             height: 280,
-            colorDark: "#0f172a",
+            colorDark: "#0a1428",
             colorLight: "#f1f5f9",
             correctLevel: QRCode.CorrectLevel.H
         });
     }
 
+    /* ===================== ADMIN ===================== */
     function agregarPlaneacion() {
         const n = document.getElementById('planNombre').value.trim().toLowerCase();
         if (!n) return;
@@ -463,13 +355,13 @@
             snap.forEach(doc => {
                 const d = doc.data();
                 const li = document.createElement('li');
-                li.innerText = `${d.nombre} | ${d.celular} | ${d.asistio ? '✔' : '❌'}`;
+                li.innerHTML = `${d.nombre} | \( {d.celular} <span style="color:#ef4444;"> \){d.asistio ? '✔' : '❌'}</span>`;
                 lista.appendChild(li);
             });
         });
     }
 
-    /* ESCANER - Cámara se queda abierta + botón para confirmar (como pediste) */
+    /* ===================== ESCÁNER QUE FUNCIONA ===================== */
     async function iniciarEscaner() {
         const reader = document.getElementById('reader');
         const scanMsg = document.getElementById('scanMsg');
@@ -478,25 +370,52 @@
         scanMsg.innerHTML = "Iniciando cámara…";
         scanMsg.className = "status";
 
-        if (lector) { try { await lector.stop(); } catch(e){} lector = null; }
+        if (lector) {
+            try { await lector.stop(); } catch(e) {}
+            lector = null;
+        }
 
         lector = new Html5Qrcode("reader");
 
         try {
             await lector.start(
                 { facingMode: "environment" },
-                { 
-                    fps: 25, 
-                    qrbox: { width: 300, height: 300 },
-                    aspectRatio: 1.0
-                },
-                (qrText) => {
-                    console.log("✅ QR DETECTADO:", qrText);
+                { fps: 20, qrbox: { width: 280, height: 280 } },
+                async (qrText) => {
+                    console.log("QR detectado:", qrText);
                     currentQrText = qrText;
-                    lector.stop().catch(() => {});
-                    mostrarPanelConfirmacion(qrText);
+
+                    // Pausamos temporalmente para procesar
+                    try { await lector.stop(); } catch(e) {}
+
+                    const res = await db.collection("invitados")
+                        .where("nombre", "==", qrText)
+                        .get();
+
+                    if (res.empty) {
+                        scanMsg.innerHTML = "❌ QR no encontrado";
+                        scanMsg.className = "status error";
+                        setTimeout(() => iniciarEscaner(), 2000);
+                        return;
+                    }
+
+                    const docSnap = res.docs[0];
+                    const data = docSnap.data();
+
+                    if (data.asistio === true) {
+                        scanMsg.innerHTML = `⚠️ Ya ingresó: ${data.nombre}`;
+                        scanMsg.className = "status warn";
+                    } else {
+                        await docSnap.ref.update({ asistio: true });
+                        console.log("✅ ASISTENCIA MARCADA en Firebase");
+                        scanMsg.innerHTML = `✅ Bienvenido<br><strong>${data.nombre}</strong>`;
+                        scanMsg.className = "status success";
+                    }
+
+                    // Reinicia el escáner automáticamente
+                    setTimeout(() => iniciarEscaner(), 2800);
                 },
-                () => {}   // no QR = silencio
+                () => {} // no QR
             );
 
             scanMsg.innerHTML = "📸 Cámara lista • Apunta al QR";
@@ -504,75 +423,21 @@
 
         } catch (err) {
             console.error(err);
-            scanMsg.innerHTML = `❌ Error cámara:<br>${err.message}<br><small>Permiso denegado o sin HTTPS</small>`;
+            scanMsg.innerHTML = `❌ Error cámara: ${err.message}<br><small>Usa HTTPS (Vercel)</small>`;
             scanMsg.className = "status error";
         }
-    }
-
-    function mostrarPanelConfirmacion(qrText) {
-        const panel = document.getElementById('scanResult');
-        document.getElementById('qrDetectedText').innerHTML = `<strong>Nombre detectado:</strong><br>${qrText}`;
-        panel.classList.remove('hidden');
-    }
-
-    /* BOTÓN QUE REALMENTE ENVÍA LA SOLICITUD A FIREBASE */
-    async function procesarEscaneo() {
-        const panel = document.getElementById('scanResult');
-        const scanMsg = document.getElementById('scanMsg');
-        panel.classList.add('hidden');
-
-        if (!currentQrText) return;
-
-        scanMsg.innerHTML = "Buscando en Firebase…";
-        scanMsg.className = "status";
-
-        try {
-            const res = await db.collection("invitados")
-                .where("nombre", "==", currentQrText)
-                .get();
-
-            if (res.empty) {
-                scanMsg.innerHTML = "❌ Ese nombre no existe";
-                scanMsg.className = "status error";
-                setTimeout(() => iniciarEscaner(), 2200);
-                return;
-            }
-
-            const docSnap = res.docs[0];
-            const data = docSnap.data();
-
-            if (data.asistio === true) {
-                scanMsg.innerHTML = `⚠️ Ya había ingresado: ${data.nombre}`;
-                scanMsg.className = "status warn";
-            } else {
-                await docSnap.ref.update({ asistio: true });
-                console.log("✅ FIREBASE ACTUALIZADO - asistio: true");
-                scanMsg.innerHTML = `✅ Asistencia marcada<br><strong>${data.nombre}</strong>`;
-                scanMsg.className = "status success";
-            }
-
-            setTimeout(() => iniciarEscaner(), 2800);
-
-        } catch (err) {
-            console.error(err);
-            scanMsg.innerHTML = `❌ Error Firebase:<br>${err.message}`;
-            scanMsg.className = "status error";
-            setTimeout(() => iniciarEscaner(), 3000);
-        }
-    }
-
-    function cancelarEscaneo() {
-        document.getElementById('scanResult').classList.add('hidden');
-        iniciarEscaner();
     }
 
     function detenerEscaner() {
-        if (lector) { try { lector.stop(); } catch(e){} lector = null; }
+        if (lector) {
+            try { lector.stop(); } catch(e) {}
+            lector = null;
+        }
         document.getElementById('reader').innerHTML = "";
         document.getElementById('scanMsg').innerHTML = "Cámara detenida";
-        document.getElementById('scanResult').classList.add('hidden');
     }
 
+    /* ===================== AUTO ADMIN ===================== */
     window.addEventListener("load", () => {
         if (localStorage.getItem("admin") === "true") {
             document.getElementById('registro').classList.add('hidden');
