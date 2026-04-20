@@ -6,57 +6,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#0a192f;
-  color:#e0f2fe;
-}
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap');
 
-.container{max-width:500px;margin:auto;padding:20px;}
+    :root {
+        --ios-blue: #0a84ff;
+        --glass: rgba(20, 25, 40, 0.78);
+    }
 
-.card{
-  background:#0f172a;
-  border:1px solid #1e3a8a;
-  padding:20px;
-  border-radius:12px;
-  margin-bottom:15px;
-}
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-input,button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:8px;
-  border:none;
-}
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        background: linear-gradient(135deg, #0a1428, #1a2338, #0a1428);
+        color: #f1f5f9;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
 
-input{
-  background:#020617;
-  color:white;
-  border:1px solid #1e3a8a;
-}
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at 30% 20%, rgba(10, 132, 255, 0.32) 0%, transparent 55%),
+                    radial-gradient(circle at 75% 80%, rgba(10, 132, 255, 0.28) 0%, transparent 60%);
+        filter: blur(100px);
+        z-index: -1;
+        pointer-events: none;
+    }
 
-button{
-  background:#2563eb;
-  color:white;
-}
+    .container { max-width: 500px; margin: 0 auto; padding: 20px; }
 
-.hidden{display:none;}
+    .card {
+        background: var(--glass);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 26px;
+        padding: 26px 22px;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.45),
+                    0 0 0 1px rgba(255,255,255,0.09) inset;
+        backdrop-filter: blur(40px);
+    }
 
-#reader{
-  width:100%;
-  min-height:300px;
-  border-radius:10px;
-  overflow:hidden;
-}
+    h2 {
+        text-align: center;
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+    }
 
-li{
-  background:#020617;
-  padding:10px;
-  margin-top:5px;
-  border-radius:6px;
-}
+    input {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1.5px solid rgba(148, 163, 184, 0.3);
+        border-radius: 18px;
+        padding: 16px 20px;
+        font-size: 17px;
+        color: #f1f5f9;
+        margin-bottom: 14px;
+    }
+
+    input:focus {
+        border-color: #0a84ff;
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        border: none;
+        border-radius: 18px;
+        padding: 16px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+        background: linear-gradient(90deg, #0a84ff, #3b9eff);
+        color: white;
+    }
+
+    .hidden { display: none; }
+
+    #reader {
+        width: 100%;
+        min-height: 380px;
+        border-radius: 26px;
+        overflow: hidden;
+        border: 6px solid #0a84ff;
+        background: #0a1428;
+    }
+
+    .status {
+        text-align: center;
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: 18px;
+        background: rgba(15,23,42,0.8);
+    }
+
+    .success { color:#22c55e; }
+    .error { color:#ef4444; }
+    .warn { color:#fbbf24; }
 </style>
 </head>
 
@@ -66,18 +115,18 @@ li{
 
 <!-- REGISTRO -->
 <div id="registro" class="card">
-<h2>Registro</h2>
-<input id="nombre" placeholder="Nombre completo">
-<input id="celular" placeholder="Celular">
-<button onclick="registrar()">Entrar</button>
-<p id="msg"></p>
+    <h2>Registro</h2>
+    <input id="nombre" placeholder="Nombre completo">
+    <input id="celular" placeholder="Celular">
+    <input id="codigo" placeholder="Código admin (opcional)">
+    <button onclick="registrar()">Continuar</button>
+    <p id="msg" class="status"></p>
 </div>
 
 <!-- INVITADO -->
 <div id="invitado" class="card hidden">
-<h2>Tu acceso</h2>
-<div id="qr"></div>
-<p id="info"></p>
+    <h2>Tu QR</h2>
+    <div id="qr"></div>
 </div>
 
 <!-- ADMIN -->
@@ -85,20 +134,15 @@ li{
 
 <div class="card">
 <h2>Planeación</h2>
-<input id="planNombre" placeholder="Nombre permitido">
+<input id="planNombre" placeholder="Nombre">
 <button onclick="agregarPlaneacion()">Agregar</button>
-<ul id="listaPlan"></ul>
-</div>
-
-<div class="card">
-<h2>Invitados</h2>
-<ul id="listaInvitados"></ul>
 </div>
 
 <div class="card">
 <h2>Escáner</h2>
 <button onclick="iniciarEscaner()">Abrir cámara</button>
 <div id="reader"></div>
+<p id="scanMsg" class="status">Listo</p>
 </div>
 
 </div>
@@ -112,13 +156,12 @@ li{
 
 <script>
 firebase.initializeApp({
-  apiKey:"TU_API",
-  authDomain:"TU_AUTH",
-  projectId:"TU_ID"
+  apiKey: "AIzaSyAWyE...",
+  authDomain: "fiesta-qr-55d9a.firebaseapp.com",
+  projectId: "fiesta-qr-55d9a"
 });
 
 const db = firebase.firestore();
-
 let lector = null;
 
 /* NORMALIZAR */
@@ -132,103 +175,53 @@ async function registrar(){
   const msg = document.getElementById("msg");
 
   if(!nombre || !celular){
-    msg.innerText = "Completa datos";
+    msg.innerText="Completa datos";
     return;
   }
 
-  try{
+  const plan = await db.collection("planeacion").get();
+  let ok = false;
 
-    const plan = await db.collection("planeacion").get();
+  plan.forEach(d=>{
+    if(norm(d.data().nombre) === nombre) ok = true;
+  });
 
-    let autorizado = false;
-
-    plan.forEach(d=>{
-      if(norm(d.data().nombre) === nombre){
-        autorizado = true;
-      }
-    });
-
-    if(!autorizado){
-      msg.innerText = "No estás en lista";
-      return;
-    }
-
-    const existing = await db.collection("invitados")
-      .where("nombre","==",nombre)
-      .get();
-
-    if(!existing.empty){
-      mostrar(nombre);
-      return;
-    }
-
-    await db.collection("invitados").add({
-      nombre,
-      celular,
-      asistio:false
-    });
-
-    mostrar(nombre);
-
-  }catch(e){
-    msg.innerText = "Error sistema";
-    console.log(e);
+  if(!ok){
+    msg.innerText="No estás en lista";
+    return;
   }
+
+  await db.collection("invitados").add({
+    nombre,
+    celular,
+    qr: nombre,
+    asistio:false
+  });
+
+  mostrarQR(nombre);
 }
 
-/* ================= MOSTRAR QR ================= */
-function mostrar(nombre){
-
-  document.getElementById("registro").classList.add("hidden");
-  document.getElementById("invitado").classList.remove("hidden");
+/* QR */
+function mostrarQR(texto){
+  registro.classList.add("hidden");
+  invitado.classList.remove("hidden");
 
   document.getElementById("qr").innerHTML="";
 
   new QRCode(document.getElementById("qr"),{
-    text:nombre,
-    width:240,
-    height:240
+    text:texto,
+    width:260,
+    height:260
   });
-
-  document.getElementById("info").innerText = nombre;
 }
 
-/* ================= PLANEACIÓN ================= */
-async function agregarPlaneacion(){
-  const n = norm(planNombre.value);
-  if(!n)return;
-  await db.collection("planeacion").add({nombre:n});
-  planNombre.value="";
-}
-
-/* ================= LISTAS ================= */
-function cargar(){
-
-  db.collection("planeacion").onSnapshot(s=>{
-    listaPlan.innerHTML="";
-    s.forEach(d=>{
-      listaPlan.innerHTML += `<li>${d.data().nombre}</li>`;
-    });
-  });
-
-  db.collection("invitados").onSnapshot(s=>{
-    listaInvitados.innerHTML="";
-    s.forEach(d=>{
-      const x=d.data();
-      listaInvitados.innerHTML += `<li>${x.nombre} | ${x.asistio ? "✔" : "❌"}</li>`;
-    });
-  });
-
-}
-
-/* ================= ESCÁNER ROBUSTO ================= */
+/* ================= ESCÁNER (FIX REAL) ================= */
 async function iniciarEscaner(){
 
-  const reader = document.getElementById("reader");
-  reader.innerHTML="";
+  const msg = document.getElementById("scanMsg");
 
   if(lector){
-    try{ await lector.stop(); }catch(e){}
+    try{await lector.stop();}catch(e){}
   }
 
   lector = new Html5Qrcode("reader");
@@ -239,43 +232,40 @@ async function iniciarEscaner(){
       { facingMode:"environment" },
       { fps:15, qrbox:250 },
 
-      async (qrText)=>{
+      async(qrText)=>{
 
         const nombre = norm(qrText);
 
         try{ await lector.stop(); }catch(e){}
 
         const res = await db.collection("invitados")
-          .where("nombre","==",nombre)
+          .where("qr","==",nombre)
           .get();
 
         if(res.empty){
-          alert("No registrado");
+          msg.innerText="No encontrado";
           return;
         }
 
         const doc = res.docs[0];
-        const data = doc.data();
+        const d = doc.data();
 
-        if(data.asistio){
-          alert("Ya ingresó: " + data.nombre);
+        if(d.asistio){
+          msg.innerText="Ya ingresó " + d.nombre;
         }else{
           await doc.ref.update({asistio:true});
-          alert("Bienvenido " + data.nombre);
+          msg.innerText="Bienvenido " + d.nombre;
         }
 
       }
 
     );
 
-  }catch(err){
-    console.log(err);
-    alert("Error cámara");
+  }catch(e){
+    msg.innerText="Error cámara";
   }
 
 }
-
-window.onload = cargar;
 
 </script>
 
