@@ -60,7 +60,7 @@ body::after{
 }
 
 a{color:inherit;text-decoration:none}
-button,input{font:inherit}
+button,input,select{font:inherit}
 .hidden{display:none !important}
 
 .container{
@@ -264,6 +264,63 @@ button,input{font:inherit}
   background:rgba(14,14,14,.96);
 }
 .field.numeric{font-variant-numeric:tabular-nums;letter-spacing:.1px}
+
+/* ── Phone row: country selector + number field ── */
+.phone-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+  align-items:stretch;
+}
+
+.country-select-wrap{
+  position:relative;
+  flex:0 0 auto;
+}
+
+.country-select{
+  appearance:none;
+  -webkit-appearance:none;
+  background:rgba(14,14,14,.86);
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:20px;
+  color:var(--text);
+  padding:16px 36px 16px 14px;
+  font-size:.9rem;
+  font-weight:600;
+  cursor:pointer;
+  outline:none;
+  transition:all .2s ease;
+  white-space:nowrap;
+  height:100%;
+  min-width:114px;
+}
+
+.country-select:focus{
+  border-color:rgba(255,138,31,.72);
+  box-shadow:0 0 0 4px rgba(255,138,31,.15);
+  background:rgba(14,14,14,.96);
+}
+
+.country-select option{
+  background:#141414;
+  color:#f5f5f5;
+}
+
+.country-caret{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;
+  color:var(--muted);
+  font-size:.72rem;
+}
+
+.phone-input{
+  flex:1 1 auto;
+  margin-bottom:0 !important;
+}
 
 .btn-row{
   display:grid;
@@ -715,6 +772,8 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
   .choice-grid,
   .stats{grid-template-columns:1fr 1fr}
   .config-grid{grid-template-columns:1fr}
+  .phone-row{flex-direction:column}
+  .country-select{width:100%;height:auto}
 }
 </style>
 
@@ -729,12 +788,12 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
       <div class="brand-mark"></div>
       <div class="brand-text">
         <h1>Invitación Evento</h1>
-        <p>Fiesta privada</p>
+        <p>Despedida generación 2023 - 2026</p>
       </div>
     </div>
 
     <div class="badges">
-      <div class="chip"><span class="chip-dot"></span> Activa</div>
+      <div class="chip"><span class="chip-dot"></span> Vigente</div>
       <button class="btn-ghost hidden" id="logoutBtn" onclick="cerrarSesionAdmin()" style="width:auto;padding:10px 14px;border-radius:999px;font-size:.9rem;">Salir admin</button>
     </div>
   </div>
@@ -745,8 +804,8 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
         <div>
           <div class="hero-kicker">Acceso</div>
           <div class="hero-title">
-            <span>Fiesta</span>
-            <span>privada</span>
+            <span>Despedida</span>
+            <span>gen 2023–26</span>
           </div>
         </div>
       </div>
@@ -755,7 +814,35 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
         <div class="hero-kicker">Entrada</div>
         <div class="section-title">Registro</div>
         <input id="nombre" class="field" type="text" placeholder="Nombre completo" autocomplete="name">
-        <input id="celular" class="field numeric" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Celular" autocomplete="tel">
+
+        <!-- Phone row: country selector + number -->
+        <div class="phone-row">
+          <div class="country-select-wrap">
+            <select id="countryCode" class="country-select">
+              <option value="+52" data-code="MX" selected>🇲🇽 +52</option>
+              <option value="+1" data-code="US">🇺🇸 +1</option>
+              <option value="+1" data-code="CA">🇨🇦 +1 CA</option>
+              <option value="+34" data-code="ES">🇪🇸 +34</option>
+              <option value="+57" data-code="CO">🇨🇴 +57</option>
+              <option value="+54" data-code="AR">🇦🇷 +54</option>
+              <option value="+56" data-code="CL">🇨🇱 +56</option>
+              <option value="+51" data-code="PE">🇵🇪 +51</option>
+              <option value="+593" data-code="EC">🇪🇨 +593</option>
+              <option value="+502" data-code="GT">🇬🇹 +502</option>
+              <option value="+504" data-code="HN">🇭🇳 +504</option>
+              <option value="+503" data-code="SV">🇸🇻 +503</option>
+              <option value="+505" data-code="NI">🇳🇮 +505</option>
+              <option value="+506" data-code="CR">🇨🇷 +506</option>
+              <option value="+507" data-code="PA">🇵🇦 +507</option>
+              <option value="+1809" data-code="DO">🇩🇴 +1809</option>
+              <option value="+58" data-code="VE">🇻🇪 +58</option>
+              <option value="+55" data-code="BR">🇧🇷 +55</option>
+            </select>
+            <span class="country-caret">▾</span>
+          </div>
+          <input id="celular" class="field numeric phone-input" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Celular" autocomplete="tel">
+        </div>
+
         <input id="codigo" class="field numeric" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Código" value="000000">
         <div class="btn-row">
           <button class="btn-primary" onclick="registrar()">Entrar</button>
@@ -997,6 +1084,14 @@ let configUnsub = null;
 
 const $ = (id) => document.getElementById(id);
 
+function getFullPhone() {
+  const prefix = ($("countryCode").value || "+52").trim();
+  const digits = ($("celular").value || "").trim();
+  // If user already typed the prefix, don't duplicate
+  if (digits.startsWith("+")) return digits;
+  return prefix + digits;
+}
+
 function normalizeText(value) {
   return (value || "")
     .normalize("NFD")
@@ -1115,7 +1210,7 @@ function countryNameFromCode(code) {
     MX: "México", US: "Estados Unidos", CA: "Canadá", ES: "España", CO: "Colombia",
     AR: "Argentina", CL: "Chile", PE: "Perú", EC: "Ecuador", GT: "Guatemala",
     HN: "Honduras", SV: "El Salvador", NI: "Nicaragua", CR: "Costa Rica", PA: "Panamá",
-    DO: "República Dominicana", VE: "Venezuela"
+    DO: "República Dominicana", VE: "Venezuela", BR: "Brasil"
   };
   return map[code] || (code ? code : "No identificado");
 }
@@ -1210,6 +1305,7 @@ function limpiarFormulario() {
   $("nombre").value = "";
   $("celular").value = "";
   $("codigo").value = DEFAULT_CODE;
+  $("countryCode").value = "+52";
   setNotice($("msg"), "Listo.", "");
 }
 
@@ -1232,7 +1328,7 @@ async function nextCounter(counterName) {
 
 async function registrar() {
   const nombreRaw = $("nombre").value.trim();
-  const celularRaw = $("celular").value.trim();
+  const celularRaw = getFullPhone();
   const codigoRaw = ($("codigo").value || DEFAULT_CODE).trim();
 
   const nombreKey = normalizeText(nombreRaw);
@@ -1252,7 +1348,7 @@ async function registrar() {
     return;
   }
 
-  if (!nombreRaw || !celularRaw) {
+  if (!nombreRaw || !$("celular").value.trim()) {
     setNotice(msg, "Completa nombre y celular.", "error");
     return;
   }
@@ -1610,4 +1706,4 @@ window.addEventListener("load", async () => {
 });
 </script>
 </body>
-    </html>
+</html>
