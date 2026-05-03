@@ -815,7 +815,6 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
         <div class="section-title">Registro</div>
         <input id="nombre" class="field" type="text" placeholder="Nombre completo" autocomplete="name">
 
-        <!-- Phone row: country selector + number -->
         <div class="phone-row">
           <div class="country-select-wrap">
             <select id="countryCode" class="country-select">
@@ -1103,7 +1102,6 @@ const $ = (id) => document.getElementById(id);
 function getFullPhone() {
   const prefix = ($("countryCode").value || "+52").trim();
   const digits = ($("celular").value || "").trim();
-  // If user already typed the prefix, don't duplicate
   if (digits.startsWith("+")) return digits;
   return prefix + digits;
 }
@@ -1239,7 +1237,6 @@ function buildWhatsAppUrl(phoneInfo, name) {
 }
 
 function generateAccessCode(nombre, timestamp) {
-  // Extract tokens (words), skip common particles, take last 2 as "apellidos"
   const particles = ["de","del","la","las","los","y","e","el","al","a","o","u","da","do","dos","das","san","santa"];
   const tokens = (nombre || "")
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -1247,10 +1244,8 @@ function generateAccessCode(nombre, timestamp) {
     .split(/\s+/).filter(Boolean)
     .filter(t => !particles.includes(t.toLowerCase()));
 
-  // Take up to 2 last tokens as apellidos, up to 3 chars each
   const apellidoPart = tokens.slice(-2).map(t => t.slice(0, 3)).join("").padEnd(3, "X").slice(0, 6);
 
-  // Hour + minute from timestamp (ms)
   const d = timestamp ? new Date(timestamp) : new Date();
   const hh = String(d.getHours()).padStart(2, "0");
   const mm = String(d.getMinutes()).padStart(2, "0");
@@ -1259,14 +1254,47 @@ function generateAccessCode(nombre, timestamp) {
   return apellidoPart + timePart;
 }
 
+function buildRegistrationMeta(now) {
+  return {
+    timestampISO: now.toISOString(),
+    fechaRegistro: now.toLocaleDateString("es-MX"),
+    horaRegistro: now.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+    fechaHoraRegistro: now.toLocaleString("es-MX", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    }),
+    diaSemanaRegistro: now.toLocaleDateString("es-MX", { weekday: "long" }),
+    diaRegistro: String(now.getDate()).padStart(2, "0"),
+    mesRegistro: String(now.getMonth() + 1).padStart(2, "0"),
+    anioRegistro: String(now.getFullYear()),
+    minutosRegistro: String(now.getMinutes()).padStart(2, "0"),
+    horasRegistro: String(now.getHours()).padStart(2, "0"),
+    segundoRegistro: String(now.getSeconds()).padStart(2, "0"),
+    milisegundoRegistro: String(now.getMilliseconds()).padStart(3, "0"),
+    zonaHoraria: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+    idioma: navigator.language || "",
+    plataforma: navigator.platform || "",
+    userAgent: navigator.userAgent || "",
+    pantallaAncho: window.screen?.width || 0,
+    pantallaAlto: window.screen?.height || 0,
+    ventanaAncho: window.innerWidth || 0,
+    ventanaAlto: window.innerHeight || 0,
+    referrer: document.referrer || "",
+    urlActual: location.href || ""
+  };
+}
+
 function renderGuestMeta(data) {
   $("guestNameTitle").textContent = data.nombre || "Invitado";
   $("guestNumberText").textContent = data.numeroRegistro ? `#${data.numeroRegistro}` : "#—";
   $("guestPhoneText").textContent = data.phoneDisplay || data.celular || "—";
   $("guestCountryText").textContent = data.countryName || "—";
 
-  // Access code
-  const code = data.accessCode || "——";
+  const code = data.nipGenerado || data.accessCode || "——";
   if ($("guestAccessCode")) $("guestAccessCode").textContent = code;
   if ($("guestCodeInline")) $("guestCodeInline").textContent = code;
   if ($("guestCodeDesc")) {
@@ -1434,24 +1462,57 @@ async function registrar() {
 
     const numeroRegistro = await nextCounter("guestCounter");
     const nowMs = Date.now();
-    const accessCode = generateAccessCode(nombreRaw, nowMs);
+    const now = new Date(nowMs);
+    const nipGenerado = generateAccessCode(nombreRaw, nowMs);
+    const metadata = buildRegistrationMeta(now);
 
-    const docRef = await db.collection("invitados").add({
+    const payload = {
+      // Identificación
       numeroRegistro,
       nombre: nombreRaw,
       nombreKey,
+
+      // Teléfono
       celular: celularRaw,
       phoneKey,
       phoneDisplay: phoneInfo.formatted || celularRaw,
       countryCode: phoneInfo.countryCode || "",
       countryName: phoneInfo.countryName || "No identificado",
       waDigits: phoneInfo.waDigits || "",
-      codigo: codigoRaw,
+
+      // Seguridad / verificación
+      codigoUsado: codigoRaw,
+      codigoIngresado: codigoRaw,
+      nipGenerado,
+      accessCode: nipGenerado,
+
+      // Relación con planeación
       planCoincidencia: coincidencia,
-      accessCode,
+
+      // Estado
       asistira: null,
-      registradoEn: firebase.firestore.FieldValue.serverTimestamp()
-    });
+
+      // Tiempos
+      registradoEn: firebase.firestore.FieldValue.serverTimestamp(),
+      registradoLocalMs: nowMs,
+      ...metadata,
+
+      // Datos del dispositivo / contexto
+      contextoRegistro: {
+        userAgent: metadata.userAgent,
+        idioma: metadata.idioma,
+        zonaHoraria: metadata.zonaHoraria,
+        pantallaAncho: metadata.pantallaAncho,
+        pantallaAlto: metadata.pantallaAlto,
+        ventanaAncho: metadata.ventanaAncho,
+        ventanaAlto: metadata.ventanaAlto,
+        plataforma: metadata.plataforma,
+        referrer: metadata.referrer,
+        urlActual: metadata.urlActual
+      }
+    };
+
+    const docRef = await db.collection("invitados").add(payload);
 
     const fresh = await docRef.get();
     openGuestScreen(fresh.data(), docRef);
@@ -1471,7 +1532,10 @@ async function responderAsistencia(decision) {
   try {
     await currentGuestRef.update({
       asistira: decision,
-      respondidoEn: firebase.firestore.FieldValue.serverTimestamp()
+      respondidoEn: firebase.firestore.FieldValue.serverTimestamp(),
+      respondidoLocalMs: Date.now(),
+      respuestaFecha: new Date().toLocaleDateString("es-MX"),
+      respuestaHora: new Date().toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
     });
 
     currentGuestData.asistira = decision;
@@ -1675,8 +1739,13 @@ function subscribeAdminLists() {
 
       const sub = document.createElement("div");
       sub.className = "sub";
-      sub.textContent = `Coincidencia: ${d.planCoincidencia || "—"} · Código: ${d.codigo || "—"}`;
+      sub.textContent = `Código usado: ${d.codigoUsado || d.codigoIngresado || d.codigo || "—"} · NIP: ${d.nipGenerado || d.accessCode || "—"} · Coincidencia: ${d.planCoincidencia || "—"}`;
       left.appendChild(sub);
+
+      const meta = document.createElement("div");
+      meta.className = "sub";
+      meta.textContent = `${d.fechaHoraRegistro || d.fechaRegistro || "—"} · ${d.diaSemanaRegistro || "—"} · ${d.zonaHoraria || "—"}`;
+      left.appendChild(meta);
 
       const badge = document.createElement("div");
       badge.className = `badge ${status}`;
