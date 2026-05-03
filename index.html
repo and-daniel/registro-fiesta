@@ -3,924 +3,1611 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro Evento</title>
+<title>Invitación Evento</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root{
-    --bg-1:#050816;
-    --bg-2:#081120;
-    --bg-3:#101c33;
-    --card:rgba(15, 23, 42, 0.72);
-    --card-2:rgba(8, 14, 28, 0.88);
-    --line:rgba(148, 163, 184, 0.18);
-    --line-strong:rgba(10, 132, 255, 0.38);
-    --text:#eef4ff;
-    --muted:#9fb0cb;
-    --blue:#0a84ff;
-    --blue-2:#3b9eff;
-    --cyan:#2dd4ff;
-    --shadow:0 20px 60px rgba(0,0,0,.42);
-    --glow:0 0 0 1px rgba(255,255,255,.07) inset, 0 0 35px rgba(10,132,255,.22);
-    --radius:28px;
+  --bg0:#050505;
+  --bg1:#0b0b0b;
+  --bg2:#121212;
+  --card:rgba(16,16,16,.74);
+  --card-strong:rgba(13,13,13,.94);
+  --line:rgba(255,255,255,.08);
+  --text:#f5f5f5;
+  --muted:#b9b9b9;
+  --orange:#ff8a1f;
+  --orange-2:#ff5d2e;
+  --amber:#ffb24c;
+  --shadow:0 26px 70px rgba(0,0,0,.48);
+  --glow:0 0 0 1px rgba(255,255,255,.05) inset, 0 0 36px rgba(255,138,31,.18);
+  --radius:30px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-
 html,body{min-height:100%}
 
 body{
-    font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    color:var(--text);
-    background:
-        radial-gradient(circle at 15% 20%, rgba(10,132,255,.22) 0%, transparent 25%),
-        radial-gradient(circle at 85% 15%, rgba(45,212,255,.14) 0%, transparent 20%),
-        radial-gradient(circle at 75% 80%, rgba(10,132,255,.16) 0%, transparent 24%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
-    overflow-x:hidden;
+  font-family:'Space Grotesk',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 14%, rgba(255,138,31,.24) 0%, transparent 18%),
+    radial-gradient(circle at 85% 18%, rgba(255,93,46,.16) 0%, transparent 16%),
+    radial-gradient(circle at 22% 78%, rgba(255,178,76,.14) 0%, transparent 18%),
+    radial-gradient(circle at 84% 84%, rgba(255,255,255,.10) 0%, transparent 15%),
+    linear-gradient(135deg, #050505 0%, #0a0a0a 48%, #101010 100%);
+  overflow-x:hidden;
 }
 
 body::before,
 body::after{
-    content:"";
-    position:fixed;
-    inset:auto;
-    pointer-events:none;
-    z-index:-1;
-    filter:blur(90px);
+  content:"";
+  position:fixed;
+  pointer-events:none;
+  z-index:-1;
+  filter:blur(100px);
 }
-
 body::before{
-    width:420px;height:420px;
-    left:-130px;top:120px;
-    background:rgba(10,132,255,.22);
+  width:460px;height:460px;
+  left:-160px;top:100px;
+  background:rgba(255,138,31,.18);
 }
 body::after{
-    width:360px;height:360px;
-    right:-120px;bottom:70px;
-    background:rgba(45,212,255,.12);
+  width:420px;height:420px;
+  right:-160px;bottom:60px;
+  background:rgba(255,93,46,.13);
 }
 
 a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.hidden{display:none !important}
 
 .container{
-    width:min(1180px, calc(100% - 28px));
-    margin:0 auto;
-    padding:22px 0 40px;
+  width:min(1240px, calc(100% - 22px));
+  margin:0 auto;
+  padding:18px 0 34px;
 }
 
 .topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:16px;
-    margin-bottom:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:18px;
 }
 
 .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
 .brand-mark{
-    width:44px;height:44px;
-    border-radius:16px;
-    background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,0) 22%),
-        linear-gradient(145deg, rgba(10,132,255,1), rgba(59,158,255,.55));
-    box-shadow:0 10px 26px rgba(10,132,255,.35);
-    position:relative;
-    overflow:hidden;
+  width:48px;height:48px;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(255,255,255,.95), rgba(255,255,255,0) 22%),
+    radial-gradient(circle at 72% 28%, rgba(255,178,76,.82), rgba(255,178,76,0) 28%),
+    linear-gradient(145deg, rgba(255,138,31,1), rgba(255,93,46,.52));
+  box-shadow:0 16px 28px rgba(255,138,31,.25);
+  position:relative;
+  overflow:hidden;
 }
 .brand-mark::after{
-    content:"";
-    position:absolute;
-    inset:10px;
-    border-radius:12px;
-    background:linear-gradient(145deg, rgba(255,255,255,.2), rgba(255,255,255,0));
-    transform:rotate(12deg);
+  content:"";
+  position:absolute;
+  inset:10px;
+  border-radius:14px;
+  background:linear-gradient(145deg, rgba(255,255,255,.22), rgba(255,255,255,0));
+  transform:rotate(12deg);
 }
 
 .brand-text h1{
-    font-size:1.06rem;
-    font-weight:800;
-    letter-spacing:.2px;
-    line-height:1.1;
+  font-size:1.05rem;
+  font-weight:700;
+  letter-spacing:.2px;
+  line-height:1.1;
 }
 .brand-text p{
-    font-size:.88rem;
-    color:var(--muted);
-    margin-top:2px;
+  font-size:.88rem;
+  color:var(--muted);
+  margin-top:3px;
 }
 
 .badges{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content:flex-end;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
 .chip{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:10px 14px;
-    border-radius:999px;
-    background:rgba(9, 15, 29, .68);
-    border:1px solid rgba(148,163,184,.18);
-    box-shadow:var(--glow);
-    font-size:.88rem;
-    color:#dce7fb;
-    backdrop-filter:blur(18px);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(18,18,18,.72);
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:var(--glow);
+  font-size:.88rem;
+  color:#f1f1f1;
+  backdrop-filter:blur(18px);
 }
-
 .chip-dot{
-    width:8px;height:8px;border-radius:999px;background:var(--cyan);
-    box-shadow:0 0 18px var(--cyan);
+  width:8px;height:8px;border-radius:999px;background:var(--orange);
+  box-shadow:0 0 18px rgba(255,138,31,.9);
 }
 
-.screen{
-    display:none;
-    animation:fadeIn .32s ease-out;
-}
-
-.screen.active{
-    display:block;
-}
+.screen{display:none;animation:fadeIn .28s ease-out}
+.screen.active{display:block}
 
 @keyframes fadeIn{
-    from{opacity:0;transform:translateY(12px)}
-    to{opacity:1;transform:translateY(0)}
-}
-
-.hero{
-    display:grid;
-    grid-template-columns:1.05fr .95fr;
-    gap:18px;
-    margin-bottom:18px;
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow), var(--glow);
-    backdrop-filter:blur(26px);
-    -webkit-backdrop-filter:blur(26px);
-    overflow:hidden;
-    position:relative;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow), var(--glow);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+  overflow:hidden;
+  position:relative;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), transparent 18%),
+    radial-gradient(circle at top right, rgba(255,138,31,.12), transparent 36%);
+  pointer-events:none;
 }
 
-.card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,.05), transparent 20%),
-        radial-gradient(circle at top right, rgba(10,132,255,.12), transparent 35%);
-    pointer-events:none;
+.hero{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:18px;
+  margin-bottom:18px;
 }
 
 .hero-copy{
-    padding:30px 28px 28px;
-    min-height:360px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    gap:24px;
+  padding:26px 24px;
+  min-height:210px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:18px;
 }
 
 .hero-kicker{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    color:#dfeaff;
-    font-size:.9rem;
-    font-weight:600;
-    letter-spacing:.24px;
-    text-transform:uppercase;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  color:#f7f7f7;
+  font-size:.85rem;
+  font-weight:700;
+  letter-spacing:.22px;
+  text-transform:uppercase;
 }
-
 .hero-kicker::before{
-    content:"";
-    width:38px;
-    height:2px;
-    border-radius:999px;
-    background:linear-gradient(90deg, var(--blue), rgba(10,132,255,0));
-    box-shadow:0 0 22px rgba(10,132,255,.7);
+  content:"";
+  width:38px;height:2px;border-radius:999px;
+  background:linear-gradient(90deg, var(--orange), rgba(255,138,31,0));
+  box-shadow:0 0 22px rgba(255,138,31,.65);
 }
 
 .hero-title{
-    font-size:clamp(2.35rem, 5vw, 5.2rem);
-    line-height:.92;
-    letter-spacing:-2px;
-    font-weight:800;
-    margin-top:10px;
+  font-size:clamp(2.15rem, 4.2vw, 4.7rem);
+  line-height:.93;
+  letter-spacing:-2px;
+  font-weight:700;
+  margin-top:12px;
 }
-
-.hero-title span{
-    display:block;
-}
+.hero-title span{display:block}
 
 .hero-sub{
-    max-width:540px;
-    color:#c9d8ef;
-    font-size:1rem;
-    line-height:1.75;
-    margin-top:16px;
+  max-width:560px;
+  color:#d2d2d2;
+  font-size:1rem;
+  line-height:1.72;
+  margin-top:16px;
 }
-
-.hero-actions{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-top:10px;
-}
-
-.pill{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:10px 14px;
-    border-radius:999px;
-    background:rgba(7,12,24,.55);
-    border:1px solid rgba(148,163,184,.16);
-    color:#dfeaff;
-    font-size:.9rem;
-}
-
-.pill i{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--blue);
-    box-shadow:0 0 18px rgba(10,132,255,.8);
-    display:inline-block;
-}
-
-.visual{
-    min-height:360px;
-    padding:20px;
-}
-
-.visual-grid{
-    height:100%;
-    display:grid;
-    grid-template-columns:1.2fr .8fr;
-    grid-template-rows:1fr 1fr;
-    gap:12px;
-    min-height:320px;
-}
-
-.art{
-    border-radius:24px;
-    position:relative;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 16px 40px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.04) inset;
-    isolation:isolate;
-}
-
-.art::before,
-.art::after{
-    content:"";
-    position:absolute;
-    inset:auto;
-    border-radius:999px;
-    pointer-events:none;
-}
-
-.art::before{
-    width:220px;height:220px;
-    right:-55px;top:-70px;
-    background:radial-gradient(circle, rgba(255,255,255,.18), rgba(255,255,255,0) 58%);
-    filter:blur(10px);
-}
-
-.art::after{
-    width:180px;height:180px;
-    left:-50px;bottom:-70px;
-    background:radial-gradient(circle, rgba(10,132,255,.35), rgba(10,132,255,0) 58%);
-    filter:blur(18px);
-}
-
-.art-main{
-    grid-row:1 / span 2;
-    background:
-        radial-gradient(circle at 26% 28%, rgba(45,212,255,.85), transparent 14%),
-        radial-gradient(circle at 78% 24%, rgba(10,132,255,.70), transparent 15%),
-        radial-gradient(circle at 65% 70%, rgba(59,158,255,.38), transparent 17%),
-        linear-gradient(145deg, #040814 8%, #081428 38%, #0f2748 100%);
-}
-
-.art-main .shape{
-    position:absolute;
-    border-radius:999px;
-    background:linear-gradient(145deg, rgba(255,255,255,.85), rgba(255,255,255,0));
-    filter:blur(0);
-    opacity:.9;
-}
-
-.art-main .shape.one{
-    width:210px;height:210px;
-    left:-20px;bottom:-55px;
-    background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,.9) 0%, rgba(255,255,255,.1) 18%, rgba(255,255,255,0) 65%);
-}
-.art-main .shape.two{
-    width:150px;height:150px;
-    right:18px;bottom:12px;
-    background:
-        radial-gradient(circle at 50% 50%, rgba(45,212,255,.95) 0%, rgba(45,212,255,.16) 20%, rgba(45,212,255,0) 62%);
-    filter:blur(4px);
-}
-
-.art-top{
-    background:
-        linear-gradient(135deg, rgba(10,132,255,.95), rgba(15,22,43,.25) 55%, rgba(8,18,36,.92)),
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,.25), transparent 25%);
-}
-.art-bottom{
-    background:
-        linear-gradient(145deg, rgba(7,12,22,.94), rgba(10,132,255,.18)),
-        radial-gradient(circle at 70% 20%, rgba(45,212,255,.5), transparent 20%),
-        radial-gradient(circle at 25% 75%, rgba(59,158,255,.35), transparent 18%);
-}
-
-.art-top .line,
-.art-bottom .line{
-    position:absolute;
-    inset:auto;
-    border-radius:999px;
-    background:linear-gradient(90deg, rgba(255,255,255,.0), rgba(255,255,255,.95), rgba(255,255,255,.0));
-    opacity:.65;
-    filter:blur(.5px);
-}
-
-.art-top .line.a{width:110px;height:2px;left:18px;top:22px;transform:rotate(-12deg)}
-.art-top .line.b{width:80px;height:2px;right:18px;bottom:20px;transform:rotate(26deg)}
-.art-bottom .line.a{width:100px;height:2px;right:16px;top:20px;transform:rotate(12deg)}
-.art-bottom .line.b{width:70px;height:2px;left:18px;bottom:18px;transform:rotate(-28deg)}
 
 .form-shell{
-    margin-top:18px;
-    display:grid;
-    grid-template-columns:1.08fr .92fr;
-    gap:18px;
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1.08fr .92fr;
+  gap:18px;
 }
 
-.form-card{
-    padding:28px 26px;
-}
+.form-card{padding:24px}
 
 .section-title{
-    font-size:1.1rem;
-    font-weight:700;
-    letter-spacing:-.3px;
-    margin-bottom:16px;
+  font-size:1.08rem;
+  font-weight:700;
+  letter-spacing:-.3px;
+  margin-bottom:14px;
 }
 
 .section-sub{
-    color:var(--muted);
-    font-size:.95rem;
-    line-height:1.55;
-    margin-top:8px;
-    margin-bottom:18px;
+  color:var(--muted);
+  font-size:.94rem;
+  line-height:1.55;
+  margin-top:8px;
+  margin-bottom:18px;
 }
 
 .field{
-    width:100%;
-    border:none;
-    outline:none;
-    color:var(--text);
-    background:rgba(6, 12, 24, .84);
-    border:1px solid rgba(148,163,184,.22);
-    border-radius:18px;
-    padding:16px 18px;
-    font-size:1rem;
-    transition:all .22s ease;
-    margin-bottom:12px;
-    box-shadow:0 0 0 1px rgba(255,255,255,.03) inset;
+  width:100%;
+  border:none;
+  outline:none;
+  color:var(--text);
+  background:rgba(14,14,14,.86);
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:20px;
+  padding:16px 18px;
+  font-size:1rem;
+  transition:all .2s ease;
+  margin-bottom:12px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.02) inset;
 }
-
-.field::placeholder{color:#8ea0be}
-
+.field::placeholder{color:#909090}
 .field:focus{
-    border-color:rgba(10,132,255,.75);
-    box-shadow:0 0 0 4px rgba(10,132,255,.16);
-    background:rgba(6, 12, 24, .95);
+  border-color:rgba(255,138,31,.72);
+  box-shadow:0 0 0 4px rgba(255,138,31,.15);
+  background:rgba(14,14,14,.96);
 }
-
-.field.numeric{
-    font-variant-numeric:tabular-nums;
-    letter-spacing:.12px;
-}
+.field.numeric{font-variant-numeric:tabular-nums;letter-spacing:.1px}
 
 .btn-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-top:10px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:10px;
 }
 
 button{
-    border:none;
-    border-radius:18px;
-    padding:15px 16px;
-    font-size:1rem;
-    font-weight:700;
-    cursor:pointer;
-    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease, opacity .2s ease;
-    user-select:none;
+  border:none;
+  border-radius:20px;
+  padding:15px 16px;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease, opacity .18s ease;
+  user-select:none;
 }
-
-button:active{transform:translateY(1px) scale(.99)}
+button:active{transform:translateY(1px) scale(.995)}
+button:hover{filter:brightness(1.04);transform:translateY(-1px)}
 
 .btn-primary{
-    color:#fff;
-    background:linear-gradient(90deg, var(--blue), var(--blue-2));
-    box-shadow:0 14px 28px rgba(10,132,255,.34);
+  color:#fff;
+  background:linear-gradient(90deg, var(--orange), var(--orange-2));
+  box-shadow:0 14px 28px rgba(255,93,46,.22);
 }
 
 .btn-secondary{
-    color:#eff6ff;
-    background:rgba(10,15,29,.92);
-    border:1px solid rgba(148,163,184,.24);
-    box-shadow:0 8px 18px rgba(0,0,0,.22);
+  color:#f2f2f2;
+  background:rgba(14,14,14,.92);
+  border:1px solid rgba(255,255,255,.11);
+  box-shadow:0 8px 18px rgba(0,0,0,.22);
 }
 
 .btn-ghost{
-    color:#dbeafe;
-    background:rgba(255,255,255,.03);
-    border:1px solid rgba(148,163,184,.16);
-}
-
-button:hover{
-    filter:brightness(1.04);
-    transform:translateY(-1px);
+  color:#ededed;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.09);
 }
 
 .notice{
-    margin-top:14px;
-    padding:14px 16px;
-    border-radius:16px;
-    border:1px solid rgba(148,163,184,.16);
-    background:rgba(8,14,28,.68);
-    color:#c9d8ef;
-    line-height:1.6;
-    min-height:52px;
+  margin-top:14px;
+  padding:14px 16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(14,14,14,.72);
+  color:#ddd;
+  line-height:1.6;
+  min-height:52px;
 }
+.notice.success{border-color:rgba(255,138,31,.26);color:#fff0de}
+.notice.error{border-color:rgba(255,93,46,.24);color:#ffd6cf}
+.notice.warn{border-color:rgba(255,178,76,.22);color:#ffe1ba}
 
-.notice.success{border-color:rgba(34,197,94,.24);color:#c9f7d5}
-.notice.error{border-color:rgba(239,68,68,.24);color:#ffcbcb}
-.notice.warn{border-color:rgba(250,204,21,.22);color:#ffe9aa}
-
-.hr{
-    width:100%;
-    height:1px;
-    margin:16px 0 16px;
-    background:linear-gradient(90deg, transparent, rgba(10,132,255,.65), rgba(255,255,255,.18), rgba(10,132,255,.65), transparent);
-    position:relative;
+.divider{
+  position:relative;
+  margin:18px 0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,138,31,.84), rgba(255,255,255,.14), rgba(255,138,31,.84), transparent);
 }
-.hr::after{
-    content:"";
-    position:absolute;
-    left:50%;top:50%;
-    width:8px;height:8px;
-    border-radius:999px;
-    background:var(--cyan);
-    transform:translate(-50%,-50%);
-    box-shadow:0 0 18px var(--cyan);
+.divider::after{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  width:10px;height:10px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:rgba(255,178,76,.95);
+  box-shadow:0 0 20px rgba(255,178,76,.75);
 }
 
 .guest-shell{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
 }
 
 .guest-left,
 .guest-right{
-    padding:26px 24px;
+  padding:24px;
 }
 
-.location-card{
-    display:grid;
-    grid-template-columns:1.06fr .94fr;
-    gap:16px;
-    align-items:stretch;
-}
-
-.location-visual{
-    min-height:240px;
-    border-radius:24px;
-    border:1px solid rgba(148,163,184,.18);
-    background:
-        radial-gradient(circle at 18% 26%, rgba(45,212,255,.95), transparent 10%),
-        radial-gradient(circle at 72% 18%, rgba(10,132,255,.85), transparent 14%),
-        radial-gradient(circle at 58% 70%, rgba(59,158,255,.55), transparent 18%),
-        linear-gradient(145deg, #06101f 0%, #0b1730 40%, #101d37 100%);
-    position:relative;
-    overflow:hidden;
-    box-shadow:0 12px 30px rgba(0,0,0,.28);
-}
-.location-visual::before{
-    content:"";
-    position:absolute;
-    inset:18px;
-    border-radius:20px;
-    border:1px solid rgba(255,255,255,.06);
-    background:
-        linear-gradient(120deg, rgba(255,255,255,.04), transparent 18%),
-        radial-gradient(circle at 80% 25%, rgba(255,255,255,.18), transparent 18%);
-}
-.location-visual::after{
-    content:"";
-    position:absolute;
-    width:240px;height:240px;
-    right:-70px;bottom:-100px;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(10,132,255,.35), rgba(10,132,255,0) 62%);
-    filter:blur(12px);
-}
-
-.location-tag{
-    position:absolute;
-    left:18px;top:18px;
-    padding:10px 13px;
-    border-radius:999px;
-    background:rgba(0,0,0,.34);
-    border:1px solid rgba(255,255,255,.12);
-    backdrop-filter:blur(14px);
-    font-size:.88rem;
-    color:#eff6ff;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-}
-
-.location-tag span{
-    width:8px;height:8px;border-radius:50%;
-    background:#22c55e;
-    box-shadow:0 0 14px rgba(34,197,94,.9);
-}
-
-.abstract-stack{
-    position:absolute;
-    left:0;right:0;bottom:0;
-    display:flex;
-    gap:10px;
-    padding:14px;
-}
-
-.abstract-tile{
-    flex:1;
-    height:72px;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.08);
-    background:
-        radial-gradient(circle at 22% 28%, rgba(255,255,255,.14), transparent 18%),
-        linear-gradient(145deg, rgba(10,132,255,.18), rgba(255,255,255,.02));
-    box-shadow:0 10px 22px rgba(0,0,0,.18);
-}
-
-.abstract-tile.mid{
-    background:
-        radial-gradient(circle at 70% 24%, rgba(45,212,255,.35), transparent 18%),
-        linear-gradient(145deg, rgba(8,16,32,.85), rgba(10,132,255,.12));
-}
-
-.abstract-tile.last{
-    background:
-        radial-gradient(circle at 45% 35%, rgba(59,158,255,.42), transparent 16%),
-        linear-gradient(145deg, rgba(5,10,18,.9), rgba(10,132,255,.15));
-}
-
-.linkbox{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    justify-content:space-between;
+.link-row{
+  display:grid;
+  gap:12px;
 }
 
 .link-card{
-    padding:18px 18px 17px;
-    border-radius:22px;
-    background:rgba(6, 12, 24, .74);
-    border:1px solid rgba(148,163,184,.16);
-    box-shadow:0 10px 20px rgba(0,0,0,.18);
+  padding:16px 16px 15px;
+  border-radius:24px;
+  background:rgba(15,15,15,.74);
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 10px 20px rgba(0,0,0,.18);
 }
 
 .link-label{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:.86rem;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:.18px;
-    font-weight:700;
-    margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:.84rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.18px;
+  font-weight:700;
+  margin-bottom:8px;
 }
-
 .link-label .dot{
-    width:8px;height:8px;border-radius:999px;background:var(--blue);
-    box-shadow:0 0 14px rgba(10,132,255,.85);
+  width:8px;height:8px;border-radius:999px;background:var(--orange);
+  box-shadow:0 0 14px rgba(255,138,31,.85);
 }
 
 .link-title{
-    font-size:1.12rem;
-    font-weight:800;
-    letter-spacing:-.25px;
-    line-height:1.18;
-    margin-bottom:8px;
+  font-size:1.06rem;
+  font-weight:700;
+  letter-spacing:-.2px;
+  line-height:1.2;
+  margin-bottom:8px;
 }
 
 .link-desc{
-    color:#c9d8ef;
-    font-size:.94rem;
-    line-height:1.65;
+  color:#cfcfcf;
+  font-size:.92rem;
+  line-height:1.6;
 }
 
-.link-action{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    margin-top:12px;
-    color:#dfeaff;
-    font-weight:700;
-    font-size:.95rem;
+.link-action,
+.link-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  margin-top:12px;
+  padding:14px 16px;
+  border-radius:18px;
+  font-weight:700;
+  background:linear-gradient(90deg, rgba(255,138,31,.98), rgba(255,93,46,.96));
+  color:#fff;
+  border:1px solid rgba(255,138,31,.22);
+  box-shadow:0 12px 24px rgba(255,93,46,.18);
 }
 
-.link-action strong{
-    color:#fff;
+.link-btn.secondary{
+  background:rgba(14,14,14,.92);
+  border:1px solid rgba(255,255,255,.11);
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
 }
 
-.status-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    margin-top:12px;
-    padding:10px 12px;
-    border-radius:999px;
-    font-size:.9rem;
-    font-weight:700;
-    background:rgba(10,132,255,.08);
-    border:1px solid rgba(10,132,255,.16);
-    color:#dcecff;
+.event-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:999px;
+  font-size:.9rem;
+  font-weight:700;
+  background:rgba(255,138,31,.08);
+  border:1px solid rgba(255,138,31,.16);
+  color:#ffe7cc;
 }
-
-.status-badge i{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--blue);
-    box-shadow:0 0 16px rgba(10,132,255,.8);
-    display:inline-block;
+.event-badge i{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--orange);
+  box-shadow:0 0 16px rgba(255,138,31,.85);
+  display:inline-block;
 }
 
 .choice-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-top:14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:14px;
 }
 
 .choice-btn{
-    min-height:56px;
-    border-radius:18px;
-    border:1px solid rgba(148,163,184,.2);
-    background:rgba(8,14,28,.85);
-    color:#f3f8ff;
-    font-weight:800;
-    font-size:1rem;
-    box-shadow:0 8px 18px rgba(0,0,0,.18);
+  min-height:58px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(14,14,14,.9);
+  color:#f7f7f7;
+  font-weight:700;
+  font-size:1rem;
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
 }
-
 .choice-btn.yes{
-    background:linear-gradient(90deg, rgba(10,132,255,1), rgba(59,158,255,1));
-    border-color:rgba(10,132,255,.42);
+  background:linear-gradient(90deg, rgba(255,138,31,1), rgba(255,93,46,1));
+  border-color:rgba(255,138,31,.36);
 }
 .choice-btn.no{
-    background:linear-gradient(90deg, rgba(11,17,33,.94), rgba(16,24,45,.92));
+  background:linear-gradient(90deg, rgba(16,16,16,.96), rgba(22,22,22,.96));
 }
-
 .choice-btn.yes.selected{
-    box-shadow:0 0 0 4px rgba(10,132,255,.16), 0 16px 28px rgba(10,132,255,.3);
+  box-shadow:0 0 0 4px rgba(255,138,31,.16), 0 16px 28px rgba(255,93,46,.24);
 }
 .choice-btn.no.selected{
-    box-shadow:0 0 0 4px rgba(239,68,68,.12), 0 16px 28px rgba(0,0,0,.22);
-}
-
-.divider{
-    position:relative;
-    margin:20px 0;
-    height:1px;
-    background:linear-gradient(90deg, transparent, rgba(10,132,255,.84), rgba(255,255,255,.15), rgba(10,132,255,.84), transparent);
-}
-.divider::after{
-    content:"";
-    position:absolute;
-    left:50%;top:50%;
-    width:10px;height:10px;
-    transform:translate(-50%,-50%);
-    border-radius:50%;
-    background:rgba(45,212,255,.95);
-    box-shadow:0 0 20px rgba(45,212,255,.85);
+  box-shadow:0 0 0 4px rgba(255,255,255,.06), 0 16px 28px rgba(0,0,0,.22);
 }
 
 .stats{
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    gap:12px;
-    margin-bottom:16px;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:12px;
+  margin-bottom:16px;
 }
 
 .stat{
-    padding:18px 16px;
-    border-radius:22px;
-    background:rgba(8,14,28,.68);
-    border:1px solid rgba(148,163,184,.16);
-    box-shadow:0 8px 18px rgba(0,0,0,.16);
+  padding:18px 16px;
+  border-radius:24px;
+  background:rgba(14,14,14,.68);
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 8px 18px rgba(0,0,0,.16);
 }
-
 .stat .k{
-    font-size:.82rem;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:.16px;
-    font-weight:800;
+  font-size:.8rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.16px;
+  font-weight:700;
 }
-
 .stat .v{
-    margin-top:8px;
-    font-size:1.6rem;
-    font-weight:900;
-    letter-spacing:-.5px;
+  margin-top:8px;
+  font-size:1.58rem;
+  font-weight:700;
+  letter-spacing:-.45px;
 }
 
 .grid-2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-    align-items:start;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  align-items:start;
 }
 
-.list-card{
-    padding:24px;
-}
+.list-card{padding:22px}
 
 .list-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
 }
-
 .list-header .title{
-    font-size:1.15rem;
-    font-weight:800;
-    letter-spacing:-.2px;
+  font-size:1.08rem;
+  font-weight:700;
+  letter-spacing:-.2px;
 }
-
 .list-header .small{
-    color:var(--muted);
-    font-size:.92rem;
+  color:var(--muted);
+  font-size:.9rem;
 }
 
 .list{
-    list-style:none;
-    display:grid;
-    gap:10px;
+  list-style:none;
+  display:grid;
+  gap:10px;
 }
 
 .list-item{
-    padding:15px 16px;
-    border-radius:18px;
-    background:rgba(8,14,28,.72);
-    border:1px solid rgba(148,163,184,.15);
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    align-items:flex-start;
+  padding:14px 14px;
+  border-radius:20px;
+  background:rgba(14,14,14,.72);
+  border:1px solid rgba(255,255,255,.09);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:flex-start;
 }
 
+.list-item .left{
+  min-width:0;
+  flex:1 1 auto;
+}
 .list-item strong{
-    display:block;
-    font-size:1rem;
-    line-height:1.35;
+  display:block;
+  font-size:1rem;
+  line-height:1.35;
 }
-
 .list-item span{
-    color:var(--muted);
-    font-size:.92rem;
-    display:block;
-    margin-top:4px;
+  color:var(--muted);
+  font-size:.9rem;
+  display:block;
+  margin-top:4px;
+}
+.list-item .sub{
+  color:#cfcfcf;
+  font-size:.88rem;
+  margin-top:6px;
+  line-height:1.4;
 }
 
 .badge{
-    flex:0 0 auto;
-    padding:8px 11px;
-    border-radius:999px;
-    font-size:.84rem;
-    font-weight:800;
-    white-space:nowrap;
-    border:1px solid transparent;
+  flex:0 0 auto;
+  padding:8px 11px;
+  border-radius:999px;
+  font-size:.82rem;
+  font-weight:700;
+  white-space:nowrap;
+  border:1px solid transparent;
 }
-
 .badge.yes{
-    color:#dcfce7;
-    background:rgba(34,197,94,.12);
-    border-color:rgba(34,197,94,.2);
+  color:#fff2e3;
+  background:rgba(255,138,31,.14);
+  border-color:rgba(255,138,31,.24);
 }
 .badge.no{
-    color:#fee2e2;
-    background:rgba(239,68,68,.10);
-    border-color:rgba(239,68,68,.18);
+  color:#ffe2dd;
+  background:rgba(255,93,46,.12);
+  border-color:rgba(255,93,46,.18);
 }
 .badge.pending{
-    color:#fde68a;
-    background:rgba(250,204,21,.10);
-    border-color:rgba(250,204,21,.18);
+  color:#f8e2b9;
+  background:rgba(255,178,76,.10);
+  border-color:rgba(255,178,76,.18);
+}
+
+.action-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.small-btn{
+  border:none;
+  border-radius:14px;
+  padding:10px 12px;
+  font-size:.88rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.small-btn.orange{
+  color:#fff;
+  background:linear-gradient(90deg, var(--orange), var(--orange-2));
+}
+.small-btn.red{
+  color:#fff;
+  background:linear-gradient(90deg, #e11d48, #f43f5e);
+}
+.small-btn.dark{
+  color:#f4f4f4;
+  background:rgba(12,12,12,.96);
+  border:1px solid rgba(255,255,255,.1);
 }
 
 .footer-note{
-    margin-top:14px;
-    color:var(--muted);
-    font-size:.92rem;
-    line-height:1.6;
+  margin-top:14px;
+  color:var(--muted);
+  font-size:.92rem;
+  line-height:1.55;
 }
 
-.hidden{display:none !important;}
-
-@media (max-width: 980px){
-    .hero,
-    .form-shell,
-    .guest-shell,
-    .grid-2,
-    .location-card{
-        grid-template-columns:1fr;
-    }
-
-    .visual{
-        min-height:300px;
-    }
-
-    .hero-copy{
-        min-height:auto;
-    }
-
-    .stats{
-        grid-template-columns:repeat(2, 1fr);
-    }
+.config-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
-@media (max-width: 620px){
-    .container{
-        width:min(100% - 16px, 1000px);
-        padding-top:14px;
-    }
+.config-stack{
+  display:grid;
+  gap:12px;
+}
 
-    .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-    }
+.setting-box{
+  padding:16px;
+  border-radius:22px;
+  background:rgba(14,14,14,.72);
+  border:1px solid rgba(255,255,255,.09);
+}
 
-    .badges{
-        justify-content:flex-start;
-    }
+.setting-box .label{
+  font-size:.82rem;
+  text-transform:uppercase;
+  letter-spacing:.14px;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:8px;
+}
 
-    .hero-copy,
-    .form-card,
-    .guest-left,
-    .guest-right,
-    .list-card{
-        padding:20px 16px;
-    }
+.setting-value{
+  font-size:1rem;
+  font-weight:700;
+  line-height:1.4;
+  word-break:break-word;
+}
 
-    .hero-title{
-        font-size:2.35rem;
-    }
+.abstract-stack{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  display:flex;
+  gap:10px;
+  padding:14px;
+}
 
-    .stats{
-        grid-template-columns:1fr 1fr;
-    }
+.abstract-tile{
+  flex:1;
+  height:72px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.08);
+  background:
+    radial-gradient(circle at 24% 26%, rgba(255,255,255,.16), transparent 18%),
+    linear-gradient(145deg, rgba(255,138,31,.22), rgba(255,255,255,.03));
+  box-shadow:0 10px 24px rgba(0,0,0,.18);
+}
+.abstract-tile.mid{
+  background:
+    radial-gradient(circle at 70% 24%, rgba(255,178,76,.38), transparent 18%),
+    linear-gradient(145deg, rgba(15,15,15,.88), rgba(255,138,31,.1));
+}
+.abstract-tile.last{
+  background:
+    radial-gradient(circle at 45% 35%, rgba(255,93,46,.42), transparent 16%),
+    linear-gradient(145deg, rgba(10,10,10,.92), rgba(255,138,31,.14));
+}
 
-    .btn-row,
-    .choice-grid{
-        grid-template-columns:1fr;
-    }
+@media (max-width: 1080px){
+  .hero,
+  .form-shell,
+  .guest-shell,
+  .grid-2,
+  .config-grid{
+    grid-template-columns:1fr;
+  }
+  .visual{min-height:240px}
+  .hero-copy{min-height:auto}
+  .stats{grid-template-columns:repeat(2, 1fr)}
+}
+
+@media (max-width: 680px){
+  .container{
+    width:min(100% - 14px, 1240px);
+    padding-top:12px;
+  }
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .badges{justify-content:flex-start}
+  .hero-copy,
+  .form-card,
+  .guest-left,
+  .guest-right,
+  .list-card{
+    padding:18px 14px;
+  }
+  .hero-title{font-size:2.35rem}
+  .btn-row,
+  .choice-grid,
+  .stats{grid-template-columns:1fr 1fr}
+  .config-grid{grid-template-columns:1fr}
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.14/bundle/libphonenumber-js.min.js"></script>
 </head>
 
 <body>
 <div class="container">
 
-    <div class="topbar">
-        <div class="brand">
-            <div class="brand-mark"></div>
-            <div class="brand-text">
-                <h1>Registro Evento</h1>
-                <p>Invitación digital · tema azul eléctrico</p>
-    
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div class="brand-text">
+        <h1>Invitación Evento</h1>
+        <p>Fiesta privada</p>
+      </div>
+    </div>
+
+    <div class="badges">
+      <div class="chip"><span class="chip-dot"></span> Activa</div>
+      <button class="btn-ghost hidden" id="logoutBtn" onclick="cerrarSesionAdmin()" style="width:auto;padding:10px 14px;border-radius:999px;font-size:.9rem;">Salir admin</button>
+    </div>
+  </div>
+
+  <section id="authScreen" class="screen active">
+    <div class="hero">
+      <div class="card hero-copy">
+        <div>
+          <div class="hero-kicker">Acceso</div>
+          <div class="hero-title">
+            <span>Fiesta</span>
+            <span>privada</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hero-copy">
+        <div class="hero-kicker">Entrada</div>
+        <div class="section-title">Registro</div>
+        <input id="nombre" class="field" type="text" placeholder="Nombre completo" autocomplete="name">
+        <input id="celular" class="field numeric" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Celular" autocomplete="tel">
+        <input id="codigo" class="field numeric" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Código" value="000000">
+        <div class="btn-row">
+          <button class="btn-primary" onclick="registrar()">Entrar</button>
+          <button class="btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+        </div>
+        <div id="msg" class="notice">Listo.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="guestScreen" class="screen">
+    <div class="guest-shell">
+      <div class="card guest-left">
+        <div class="hero-kicker">Invitación</div>
+        <div class="hero-title" style="font-size:clamp(2rem,4vw,3.8rem);margin-top:8px;line-height:.95;">
+          <span id="guestNameTitle">Invitado</span>
+        </div>
+
+        <div class="event-badge" id="guestStatusBadge"><i></i> Estado: pendiente</div>
+
+        <div style="margin-top:14px;" class="link-row">
+          <div class="setting-box">
+            <div class="label">Registro</div>
+            <div class="setting-value" id="guestNumberText">#—</div>
+          </div>
+          <div class="setting-box">
+            <div class="label">Celular</div>
+            <div class="setting-value" id="guestPhoneText">—</div>
+          </div>
+          <div class="setting-box">
+            <div class="label">País detectado</div>
+            <div class="setting-value" id="guestCountryText">—</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="link-row">
+          <div class="link-card">
+            <div class="link-label"><span class="dot"></span> Ubicación</div>
+            <div class="link-title" id="guestLocationTitle">Terraza Sol y Luna</div>
+            <a id="guestLocationLink" class="link-action" href="https://maps.app.goo.gl/8Apn3taZhUHkWRpT6?g_st=iwb" target="_blank" rel="noopener noreferrer">Abrir ubicación</a>
+          </div>
+
+          <div class="link-card">
+            <div class="link-label"><span class="dot"></span> Grupo de invitados</div>
+            <div class="link-title" id="guestGroupTitle">grupo de invitados</div>
+            <a id="guestGroupLink" class="link-btn" href="https://chat.whatsapp.com/KYHz6ckB0J63A3kqOZYKYO" target="_blank" rel="noopener noreferrer">Entrar al grupo</a>
+          </div>
+
+          <div class="link-card">
+            <div class="link-label"><span class="dot"></span> Fecha y hora</div>
+            <div class="link-title" id="guestDateTitle">Por definir</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="choice-grid">
+          <button class="choice-btn yes" id="btnYes" onclick="responderAsistencia(true)">Asistiré</button>
+          <button class="choice-btn no" id="btnNo" onclick="responderAsistencia(false)">No asistiré</button>
+        </div>
+
+        <div id="guestMsg" class="notice" style="margin-top:14px;">Elige una opción para guardar tu respuesta.</div>
+      </div>
+
+      <div class="card guest-right">
+        <div class="section-title">Detalle</div>
+        <div class="link-row">
+          <div class="setting-box">
+            <div class="label">Fecha del evento</div>
+            <div class="setting-value" id="guestDateTitle2">Por definir</div>
+          </div>
+          <div class="setting-box">
+            <div class="label">Ubicación</div>
+            <div class="setting-value" id="guestLocationTitle2">Terraza Sol y Luna</div>
+          </div>
+          <div class="setting-box">
+            <div class="label">Grupo</div>
+            <div class="setting-value" id="guestGroupTitle2">grupo de invitados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="adminScreen" class="screen">
+    <div class="stats">
+      <div class="stat"><div class="k">Planeación</div><div class="v" id="statPlan">0</div></div>
+      <div class="stat"><div class="k">Registrados</div><div class="v" id="statInv">0</div></div>
+      <div class="stat"><div class="k">Asistirán</div><div class="v" id="statYes">0</div></div>
+      <div class="stat"><div class="k">No asistirán</div><div class="v" id="statNo">0</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card list-card">
+        <div class="list-header">
+          <div>
+            <div class="title">Configuración del evento</div>
+          </div>
+        </div>
+
+        <div class="config-stack">
+          <div class="config-grid">
+            <div class="setting-box">
+              <div class="label">Fecha del evento</div>
+              <input id="eventDate" class="field" type="date">
+            </div>
+            <div class="setting-box">
+              <div class="label">Hora del evento</div>
+              <input id="eventTime" class="field" type="time">
+            </div>
+          </div>
+
+          <div class="setting-box">
+            <div class="label">Texto de ubicación</div>
+            <input id="locationTitle" class="field" type="text" placeholder="Terraza Sol y Luna">
+          </div>
+
+          <div class="setting-box">
+            <div class="label">Link de ubicación</div>
+            <input id="locationUrl" class="field" type="url" placeholder="https://maps.app.goo.gl/...">
+          </div>
+
+          <div class="setting-box">
+            <div class="label">Texto grupo WhatsApp</div>
+            <input id="groupTitle" class="field" type="text" placeholder="grupo de invitados">
+          </div>
+
+          <div class="setting-box">
+            <div class="label">Link grupo WhatsApp</div>
+            <input id="groupUrl" class="field" type="url" placeholder="https://chat.whatsapp.com/...">
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-primary" onclick="guardarConfiguracion()">Guardar cambios</button>
+            <button class="btn-secondary" onclick="restaurarConfiguracion()">Restaurar base</button>
+          </div>
+
+          <div id="configMsg" class="notice">Listo.</div>
+        </div>
+      </div>
+
+      <div class="card list-card">
+        <div class="list-header">
+          <div>
+            <div class="title">Agregar a planeación</div>
+          </div>
+        </div>
+
+        <input id="planNombre" class="field" type="text" placeholder="Nombre para planeación" autocomplete="off">
+        <button class="btn-primary" onclick="agregarPlaneacion()">Agregar</button>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:18px;">
+      <div class="card list-card">
+        <div class="list-header">
+          <div>
+            <div class="title">Planeación actual</div>
+          </div>
+        </div>
+        <ul id="listaPlan" class="list"></ul>
+      </div>
+
+      <div class="card list-card">
+        <div class="list-header">
+          <div>
+            <div class="title">Resumen</div>
+          </div>
+        </div>
+
+        <div class="link-row">
+          <div class="link-card">
+            <div class="link-label"><span class="dot"></span> Ubicación</div>
+            <div class="link-title" id="adminLocationText">Terraza Sol y Luna</div>
+            <div class="link-desc" id="adminLocationUrlText">—</div>
+          </div>
+
+          <div class="link-card">
+            <div class="link-label"><span class="dot"></span> Grupo</div>
+            <div class="link-title" id="adminGroupText">grupo de invitados</div>
+            <div class="link-desc" id="adminGroupUrlText">—</div>
+          </div>
+
+          <div class="link-card">
+            <div class="link-label"><span class="dot"></span> Fecha y hora</div>
+            <div class="link-title" id="adminDateText">Por definir</div>
+            <div class="link-desc" id="adminDateDesc">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card list-card" style="margin-top:18px;">
+      <div class="list-header">
+        <div>
+          <div class="title">Personas registradas</div>
+        </div>
+      </div>
+      <ul id="listaInvitados" class="list"></ul>
+    </div>
+  </section>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAWyE5VZXL5j4iFdOQoVRQ-2_DB0Eo3f6U",
+  authDomain: "fiesta-qr-55d9a.firebaseapp.com",
+  projectId: "fiesta-qr-55d9a"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const ADMIN_CODE = "142534";
+const DEFAULT_CODE = "000000";
+
+const defaultConfig = {
+  date: "",
+  time: "",
+  locationTitle: "Terraza Sol y Luna",
+  locationUrl: "https://maps.app.goo.gl/8Apn3taZhUHkWRpT6?g_st=iwb",
+  groupTitle: "grupo de invitados",
+  groupUrl: "https://chat.whatsapp.com/KYHz6ckB0J63A3kqOZYKYO"
+};
+
+let eventConfig = { ...defaultConfig };
+let currentGuestRef = null;
+let currentGuestData = null;
+let guestUnsub = null;
+let planeacionUnsub = null;
+let invitadosUnsub = null;
+let configUnsub = null;
+
+const $ = (id) => document.getElementById(id);
+
+function normalizeText(value) {
+  return (value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function normalizePhone(value) {
+  return (value || "").replace(/[^\d+]/g, "").trim();
+}
+
+function tokenizeName(value) {
+  return normalizeText(value)
+    .split(" ")
+    .filter(Boolean)
+    .filter(t => !["de","del","la","las","los","y","e","el","al","a","o","u","da","do","dos","das","san","santa"].includes(t));
+}
+
+function namesMatch(userName, planName) {
+  const userTokens = new Set(tokenizeName(userName));
+  const planTokens = tokenizeName(planName);
+  if (!userTokens.size || !planTokens.length) return false;
+  return planTokens.some(t => userTokens.has(t));
+}
+
+function showScreen(screenId) {
+  ["authScreen","guestScreen","adminScreen"].forEach(id => {
+    $(id).classList.toggle("active", id === screenId);
+  });
+}
+
+function setNotice(el, text, kind) {
+  el.textContent = text;
+  el.className = `notice ${kind || ""}`.trim();
+}
+
+function clearGuestButtons() {
+  $("btnYes").classList.remove("selected");
+  $("btnNo").classList.remove("selected");
+}
+
+function formatDateTime(dateStr, timeStr) {
+  if (!dateStr && !timeStr) return "Por definir";
+  if (!dateStr && timeStr) return `Hora: ${timeStr}`;
+  if (dateStr && !timeStr) {
+    const d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString("es-MX", { year:"numeric", month:"long", day:"numeric" });
+  }
+  const d = new Date(`${dateStr}T${timeStr}:00`);
+  return d.toLocaleString("es-MX", {
+    year:"numeric",
+    month:"long",
+    day:"numeric",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function detectPhoneInfo(rawPhone) {
+  const raw = (rawPhone || "").trim();
+  const digits = normalizePhone(raw).replace(/\D/g, "");
+  const hasPlus = raw.startsWith("+");
+  let result = {
+    countryCode: "",
+    countryName: "No identificado",
+    formatted: raw,
+    e164: "",
+    waDigits: digits
+  };
+
+  try {
+    if (window.libphonenumber && typeof libphonenumber.parsePhoneNumberFromString === "function") {
+      let parsed = null;
+
+      if (hasPlus) {
+        parsed = libphonenumber.parsePhoneNumberFromString(raw);
+      } else if (digits.length === 10) {
+        parsed = libphonenumber.parsePhoneNumberFromString(digits, "MX");
+      } else if (digits.length >= 11 && digits.length <= 15) {
+        parsed = libphonenumber.parsePhoneNumberFromString("+" + digits);
+      }
+
+      if (parsed && parsed.isValid()) {
+        result.countryCode = parsed.country || "";
+        result.countryName = countryNameFromCode(parsed.country || "");
+        result.formatted = parsed.formatInternational();
+        result.e164 = parsed.number;
+        result.waDigits = parsed.number.replace(/\D/g, "");
+        return result;
+      }
+    }
+  } catch (e) {}
+
+  if (digits.length === 10) {
+    result.countryCode = "MX";
+    result.countryName = "México";
+    result.formatted = `+52 ${digits}`;
+    result.e164 = `+52${digits}`;
+    result.waDigits = `52${digits}`;
+    return result;
+  }
+
+  if (hasPlus && digits.length >= 11) {
+    result.formatted = "+" + digits;
+    result.e164 = "+" + digits;
+    result.waDigits = digits;
+  }
+
+  return result;
+}
+
+function countryNameFromCode(code) {
+  const map = {
+    MX: "México", US: "Estados Unidos", CA: "Canadá", ES: "España", CO: "Colombia",
+    AR: "Argentina", CL: "Chile", PE: "Perú", EC: "Ecuador", GT: "Guatemala",
+    HN: "Honduras", SV: "El Salvador", NI: "Nicaragua", CR: "Costa Rica", PA: "Panamá",
+    DO: "República Dominicana", VE: "Venezuela"
+  };
+  return map[code] || (code ? code : "No identificado");
+}
+
+function buildWhatsAppUrl(phoneInfo, name) {
+  const digits = phoneInfo.waDigits || "";
+  if (!digits) return "";
+  const text = encodeURIComponent(`Hola ${name || ""}, te escribo respecto a la invitación del evento.`);
+  return `https://wa.me/${digits}?text=${text}`;
+}
+
+function renderGuestMeta(data) {
+  $("guestNameTitle").textContent = data.nombre || "Invitado";
+  $("guestNumberText").textContent = data.numeroRegistro ? `#${data.numeroRegistro}` : "#—";
+  $("guestPhoneText").textContent = data.phoneDisplay || data.celular || "—";
+  $("guestCountryText").textContent = data.countryName || "—";
+
+  $("guestLocationTitle").textContent = eventConfig.locationTitle || defaultConfig.locationTitle;
+  $("guestLocationTitle2").textContent = eventConfig.locationTitle || defaultConfig.locationTitle;
+  $("guestGroupTitle").textContent = eventConfig.groupTitle || defaultConfig.groupTitle;
+  $("guestGroupTitle2").textContent = eventConfig.groupTitle || defaultConfig.groupTitle;
+
+  $("guestLocationLink").href = eventConfig.locationUrl || defaultConfig.locationUrl;
+  $("guestGroupLink").href = eventConfig.groupUrl || defaultConfig.groupUrl;
+
+  $("guestLocationTitle2").textContent = eventConfig.locationTitle || defaultConfig.locationTitle;
+  $("guestGroupTitle2").textContent = eventConfig.groupTitle || defaultConfig.groupTitle;
+
+  const dateText = formatDateTime(eventConfig.date, eventConfig.time);
+  $("guestDateTitle").textContent = dateText;
+  $("guestDateTitle2").textContent = dateText;
+
+  if (data.asistira === true) {
+    $("guestStatusBadge").innerHTML = "<i></i> Estado: asistirá";
+    $("guestMsg").textContent = "Tu asistencia quedó registrada como 'Asistiré'.";
+    $("guestMsg").className = "notice success";
+    $("btnYes").classList.add("selected");
+    $("btnNo").classList.remove("selected");
+  } else if (data.asistira === false) {
+    $("guestStatusBadge").innerHTML = "<i></i> Estado: no asistirá";
+    $("guestMsg").textContent = "Tu respuesta quedó registrada como 'No asistiré'.";
+    $("guestMsg").className = "notice warn";
+    $("btnNo").classList.add("selected");
+    $("btnYes").classList.remove("selected");
+  } else {
+    $("guestStatusBadge").innerHTML = "<i></i> Estado: pendiente";
+    $("guestMsg").textContent = "Elige una opción para guardar tu respuesta.";
+    $("guestMsg").className = "notice";
+    clearGuestButtons();
+  }
+}
+
+function openGuestScreen(data, ref) {
+  currentGuestData = data;
+  currentGuestRef = ref;
+  localStorage.setItem("activeGuestCell", data.phoneKey || data.celularKey || normalizePhone(data.celular || ""));
+  showScreen("guestScreen");
+
+  if (guestUnsub) {
+    try { guestUnsub(); } catch(e) {}
+    guestUnsub = null;
+  }
+
+  guestUnsub = currentGuestRef.onSnapshot((snap) => {
+    if (snap.exists) {
+      currentGuestData = snap.data();
+      renderGuestMeta(currentGuestData);
+    }
+  });
+
+  renderGuestMeta(data);
+}
+
+function openAdminScreen() {
+  showScreen("adminScreen");
+  $("logoutBtn").classList.remove("hidden");
+  subscribeAdminLists();
+  subscribeConfig();
+}
+
+function openAuthScreen() {
+  showScreen("authScreen");
+  $("logoutBtn").classList.add("hidden");
+}
+
+function cerrarSesionAdmin() {
+  localStorage.removeItem("admin");
+  openAuthScreen();
+}
+
+function limpiarFormulario() {
+  $("nombre").value = "";
+  $("celular").value = "";
+  $("codigo").value = DEFAULT_CODE;
+  setNotice($("msg"), "Listo.", "");
+}
+
+function showConfigMessage(text, kind) {
+  setNotice($("configMsg"), text, kind);
+}
+
+async function nextCounter(counterName) {
+  const ref = db.collection("meta").doc("main");
+  let value = 0;
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const data = snap.exists ? snap.data() : {};
+    const current = Number(data[counterName] || 0);
+    value = current + 1;
+    tx.set(ref, { [counterName]: value }, { merge: true });
+  });
+  return value;
+}
+
+async function registrar() {
+  const nombreRaw = $("nombre").value.trim();
+  const celularRaw = $("celular").value.trim();
+  const codigoRaw = ($("codigo").value || DEFAULT_CODE).trim();
+
+  const nombreKey = normalizeText(nombreRaw);
+  const phoneInfo = detectPhoneInfo(celularRaw);
+  const phoneKey = phoneInfo.waDigits || normalizePhone(celularRaw).replace(/\D/g, "");
+  const msg = $("msg");
+
+  if (codigoRaw === ADMIN_CODE) {
+    localStorage.setItem("admin", "true");
+    openAdminScreen();
+    setNotice(msg, "Acceso de administrador activado.", "success");
+    return;
+  }
+
+  if (codigoRaw !== DEFAULT_CODE) {
+    setNotice(msg, "Código inválido.", "error");
+    return;
+  }
+
+  if (!nombreRaw || !celularRaw) {
+    setNotice(msg, "Completa nombre y celular.", "error");
+    return;
+  }
+
+  try {
+    const planSnap = await db.collection("planeacion").get();
+    let autorizado = false;
+    let coincidencia = "";
+
+    planSnap.forEach(doc => {
+      const planNombre = doc.data().nombre || "";
+      if (!autorizado && namesMatch(nombreRaw, planNombre)) {
+        autorizado = true;
+        coincidencia = planNombre;
+      }
+    });
+
+    if (!autorizado) {
+      setNotice(msg, "No estás en la lista.", "error");
+      return;
+    }
+
+    const existing = await db.collection("invitados")
+      .where("phoneKey", "==", phoneKey)
+      .limit(1)
+      .get();
+
+    if (!existing.empty) {
+      const doc = existing.docs[0];
+      const data = doc.data();
+      openGuestScreen(data, doc.ref);
+      setNotice(msg, "Sesión recuperada.", "success");
+      return;
+    }
+
+    const numeroRegistro = await nextCounter("guestCounter");
+
+    const docRef = await db.collection("invitados").add({
+      numeroRegistro,
+      nombre: nombreRaw,
+      nombreKey,
+      celular: celularRaw,
+      phoneKey,
+      phoneDisplay: phoneInfo.formatted || celularRaw,
+      countryCode: phoneInfo.countryCode || "",
+      countryName: phoneInfo.countryName || "No identificado",
+      waDigits: phoneInfo.waDigits || "",
+      codigo: codigoRaw,
+      planCoincidencia: coincidencia,
+      asistira: null,
+      registradoEn: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    const fresh = await docRef.get();
+    openGuestScreen(fresh.data(), docRef);
+    setNotice(msg, "Registro exitoso.", "success");
+  } catch (err) {
+    console.error(err);
+    setNotice(msg, "Error al registrar.", "error");
+  }
+}
+
+async function responderAsistencia(decision) {
+  if (!currentGuestRef || !currentGuestData) {
+    setNotice($("guestMsg"), "No hay un invitado activo.", "error");
+    return;
+  }
+
+  try {
+    await currentGuestRef.update({
+      asistira: decision,
+      respondidoEn: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    currentGuestData.asistira = decision;
+    renderGuestMeta(currentGuestData);
+  } catch (err) {
+    console.error(err);
+    setNotice($("guestMsg"), "No se pudo guardar la respuesta.", "error");
+  }
+}
+
+async function agregarPlaneacion() {
+  const input = $("planNombre");
+  const nombre = input.value.trim();
+  if (!nombre) return;
+
+  try {
+    await db.collection("planeacion").add({
+      nombre,
+      nombreKey: normalizeText(nombre),
+      creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    input.value = "";
+  } catch (err) {
+    console.error(err);
+    alert("No se pudo agregar.");
+  }
+}
+
+async function eliminarPlaneacion(docId) {
+  if (!confirm("¿Eliminar este nombre de la planeación?")) return;
+  try {
+    await db.collection("planeacion").doc(docId).delete();
+  } catch (err) {
+    console.error(err);
+    alert("No se pudo eliminar.");
+  }
+}
+
+async function guardarConfiguracion() {
+  try {
+    const payload = {
+      date: $("eventDate").value || "",
+      time: $("eventTime").value || "",
+      locationTitle: $("locationTitle").value.trim() || defaultConfig.locationTitle,
+      locationUrl: $("locationUrl").value.trim() || defaultConfig.locationUrl,
+      groupTitle: $("groupTitle").value.trim() || defaultConfig.groupTitle,
+      groupUrl: $("groupUrl").value.trim() || defaultConfig.groupUrl,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection("eventoConfig").doc("principal").set(payload, { merge: true });
+    showConfigMessage("Guardado.", "success");
+  } catch (err) {
+    console.error(err);
+    showConfigMessage("No se pudo guardar.", "error");
+  }
+}
+
+async function restaurarConfiguracion() {
+  try {
+    await db.collection("eventoConfig").doc("principal").set({
+      ...defaultConfig,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+    showConfigMessage("Restaurado.", "success");
+  } catch (err) {
+    console.error(err);
+    showConfigMessage("No se pudo restaurar.", "error");
+  }
+}
+
+function applyConfigToDOM(config) {
+  const c = { ...defaultConfig, ...(config || {}) };
+  eventConfig = c;
+
+  $("guestLocationTitle").textContent = c.locationTitle;
+  $("guestLocationTitle2").textContent = c.locationTitle;
+  $("guestGroupTitle").textContent = c.groupTitle;
+  $("guestGroupTitle2").textContent = c.groupTitle;
+
+  $("guestLocationLink").href = c.locationUrl;
+  $("guestGroupLink").href = c.groupUrl;
+
+  $("guestDateTitle").textContent = formatDateTime(c.date, c.time);
+  $("guestDateTitle2").textContent = formatDateTime(c.date, c.time);
+
+  $("adminLocationText").textContent = c.locationTitle;
+  $("adminLocationUrlText").textContent = c.locationUrl;
+  $("adminGroupText").textContent = c.groupTitle;
+  $("adminGroupUrlText").textContent = c.groupUrl;
+  $("adminDateText").textContent = formatDateTime(c.date, c.time);
+  $("adminDateDesc").textContent = c.date || c.time ? `Fecha: ${c.date || "—"} · Hora: ${c.time || "—"}` : "Sin fecha definida";
+
+  $("eventDate").value = c.date || "";
+  $("eventTime").value = c.time || "";
+  $("locationTitle").value = c.locationTitle || "";
+  $("locationUrl").value = c.locationUrl || "";
+  $("groupTitle").value = c.groupTitle || "";
+  $("groupUrl").value = c.groupUrl || "";
+}
+
+function subscribeConfig() {
+  if (configUnsub) {
+    try { configUnsub(); } catch(e) {}
+    configUnsub = null;
+  }
+
+  configUnsub = db.collection("eventoConfig").doc("principal").onSnapshot((snap) => {
+    const data = snap.exists ? snap.data() : defaultConfig;
+    applyConfigToDOM(data);
+  });
+}
+
+function subscribeAdminLists() {
+  if (planeacionUnsub) {
+    try { planeacionUnsub(); } catch(e) {}
+    planeacionUnsub = null;
+  }
+  if (invitadosUnsub) {
+    try { invitadosUnsub(); } catch(e) {}
+    invitadosUnsub = null;
+  }
+
+  planeacionUnsub = db.collection("planeacion").onSnapshot(snap => {
+    const lista = $("listaPlan");
+    lista.innerHTML = "";
+    let count = 0;
+
+    const docs = snap.docs.map(d => ({ id: d.id, data: d.data() }))
+      .sort((a,b) => {
+        const aa = a.data.creadoEn?.toMillis?.() || 0;
+        const bb = b.data.creadoEn?.toMillis?.() || 0;
+        return aa - bb;
+      });
+
+    docs.forEach(item => {
+      count += 1;
+
+      const li = document.createElement("li");
+      li.className = "list-item";
+
+      const left = document.createElement("div");
+      left.className = "left";
+
+      const strong = document.createElement("strong");
+      strong.textContent = item.data.nombre || "";
+      left.appendChild(strong);
+
+      const sub = document.createElement("div");
+      sub.className = "sub";
+      sub.textContent = item.data.nombreKey ? `Clave: ${item.data.nombreKey}` : "";
+      left.appendChild(sub);
+
+      const action = document.createElement("button");
+      action.className = "small-btn red";
+      action.textContent = "Eliminar";
+      action.onclick = () => eliminarPlaneacion(item.id);
+
+      li.appendChild(left);
+      li.appendChild(action);
+      lista.appendChild(li);
+    });
+
+    $("statPlan").textContent = count;
+  });
+
+  invitadosUnsub = db.collection("invitados").onSnapshot(snap => {
+    const lista = $("listaInvitados");
+    lista.innerHTML = "";
+
+    const docs = snap.docs.map(d => ({ id: d.id, data: d.data() }))
+      .sort((a,b) => {
+        const aa = Number(a.data.numeroRegistro || 0);
+        const bb = Number(b.data.numeroRegistro || 0);
+        if (aa && bb) return aa - bb;
+        const ta = a.data.registradoEn?.toMillis?.() || 0;
+        const tb = b.data.registradoEn?.toMillis?.() || 0;
+        return ta - tb;
+      });
+
+    let total = 0;
+    let yes = 0;
+    let no = 0;
+
+    docs.forEach((item, index) => {
+      total += 1;
+      const d = item.data;
+      const status = d.asistira === true ? "yes" : d.asistira === false ? "no" : "pending";
+      if (status === "yes") yes += 1;
+      if (status === "no") no += 1;
+
+      const li = document.createElement("li");
+      li.className = "list-item";
+
+      const left = document.createElement("div");
+      left.className = "left";
+
+      const strong = document.createElement("strong");
+      const reg = d.numeroRegistro ? `#${d.numeroRegistro}` : `#${index + 1}`;
+      strong.textContent = `${reg} · ${d.nombre || ""}`;
+      left.appendChild(strong);
+
+      const span1 = document.createElement("span");
+      span1.textContent = `${d.phoneDisplay || d.celular || ""} · ${d.countryName || "No identificado"}`;
+      left.appendChild(span1);
+
+      const sub = document.createElement("div");
+      sub.className = "sub";
+      sub.textContent = `Coincidencia: ${d.planCoincidencia || "—"} · Código: ${d.codigo || "—"}`;
+      left.appendChild(sub);
+
+      const badge = document.createElement("div");
+      badge.className = `badge ${status}`;
+      badge.textContent = status === "yes" ? "✔ Asistirá" : status === "no" ? "✕ No asistirá" : "Pendiente";
+
+      const actions = document.createElement("div");
+      actions.className = "action-row";
+
+      const waBtn = document.createElement("button");
+      waBtn.className = "small-btn orange";
+      waBtn.textContent = "WhatsApp";
+      waBtn.onclick = () => {
+        const phoneInfo = { waDigits: d.waDigits || d.phoneKey || normalizePhone(d.celular || "") };
+        const url = buildWhatsAppUrl(phoneInfo, d.nombre || "");
+        if (url) window.open(url, "_blank", "noopener,noreferrer");
+      };
+      actions.appendChild(waBtn);
+
+      const rightWrap = document.createElement("div");
+      rightWrap.style.display = "flex";
+      rightWrap.style.flexDirection = "column";
+      rightWrap.style.alignItems = "flex-end";
+      rightWrap.style.gap = "10px";
+      rightWrap.appendChild(badge);
+      rightWrap.appendChild(actions);
+
+      li.appendChild(left);
+      li.appendChild(rightWrap);
+      lista.appendChild(li);
+    });
+
+    $("statInv").textContent = total;
+    $("statYes").textContent = yes;
+    $("statNo").textContent = no;
+  });
+}
+
+async function restoreGuestFromSession() {
+  const cell = localStorage.getItem("activeGuestCell");
+  if (!cell || localStorage.getItem("admin") === "true") return;
+
+  try {
+    const res = await db.collection("invitados")
+      .where("phoneKey", "==", cell)
+      .limit(1)
+      .get();
+
+    if (res.empty) {
+      localStorage.removeItem("activeGuestCell");
+      return;
+    }
+
+    const doc = res.docs[0];
+    openGuestScreen(doc.data(), doc.ref);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+window.addEventListener("load", async () => {
+  $("codigo").value = DEFAULT_CODE;
+  applyConfigToDOM(defaultConfig);
+  subscribeConfig();
+
+  if (localStorage.getItem("admin") === "true") {
+    openAdminScreen();
+    $("logoutBtn").classList.remove("hidden");
+    return;
+  }
+
+  openAuthScreen();
+  await restoreGuestFromSession();
+});
+</script>
+</body>
+    </html>
