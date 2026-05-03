@@ -861,7 +861,13 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
           <span id="guestNameTitle">Invitado</span>
         </div>
 
-        <div class="event-badge" id="guestStatusBadge"><i></i> Estado: pendiente</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <div class="event-badge" id="guestStatusBadge"><i></i> Estado: pendiente</div>
+          <div class="event-badge" id="guestCodeBadge" style="background:rgba(255,178,76,.08);border-color:rgba(255,178,76,.18);color:#fff3d6;letter-spacing:3px;">
+            <i style="background:var(--amber);box-shadow:0 0 16px rgba(255,178,76,.85);"></i>
+            <span id="guestCodeInline">——</span>
+          </div>
+        </div>
 
         <div style="margin-top:14px;" class="link-row">
           <div class="setting-box">
@@ -910,19 +916,29 @@ button:hover{filter:brightness(1.04);transform:translateY(-1px)}
       </div>
 
       <div class="card guest-right">
-        <div class="section-title">Detalle</div>
+        <div class="hero-kicker" style="margin-bottom:14px;">Código de acceso</div>
         <div class="link-row">
-          <div class="setting-box">
-            <div class="label">Fecha del evento</div>
-            <div class="setting-value" id="guestDateTitle2">Por definir</div>
+          <div class="setting-box" style="text-align:center;padding:24px 16px;">
+            <div class="label" style="margin-bottom:14px;">Tu código único</div>
+            <div id="guestAccessCode" style="
+              font-size:2.4rem;
+              font-weight:700;
+              letter-spacing:6px;
+              font-variant-numeric:tabular-nums;
+              background:linear-gradient(90deg,var(--orange),var(--orange-2));
+              -webkit-background-clip:text;
+              -webkit-text-fill-color:transparent;
+              background-clip:text;
+              line-height:1.1;
+            ">——</div>
+            <div style="margin-top:10px;font-size:.82rem;color:var(--muted);line-height:1.5;">
+              Presenta este código al ingresar al evento
+            </div>
           </div>
+
           <div class="setting-box">
-            <div class="label">Ubicación</div>
-            <div class="setting-value" id="guestLocationTitle2">Terraza Sol y Luna</div>
-          </div>
-          <div class="setting-box">
-            <div class="label">Grupo</div>
-            <div class="setting-value" id="guestGroupTitle2">grupo de invitados</div>
+            <div class="label">Cómo se generó</div>
+            <div class="setting-value" id="guestCodeDesc" style="font-size:.92rem;font-weight:500;color:#cfcfcf;line-height:1.5;">—</div>
           </div>
         </div>
       </div>
@@ -1222,26 +1238,58 @@ function buildWhatsAppUrl(phoneInfo, name) {
   return `https://wa.me/${digits}?text=${text}`;
 }
 
+function generateAccessCode(nombre, timestamp) {
+  // Extract tokens (words), skip common particles, take last 2 as "apellidos"
+  const particles = ["de","del","la","las","los","y","e","el","al","a","o","u","da","do","dos","das","san","santa"];
+  const tokens = (nombre || "")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase().replace(/[^A-Z\s]/g, "")
+    .split(/\s+/).filter(Boolean)
+    .filter(t => !particles.includes(t.toLowerCase()));
+
+  // Take up to 2 last tokens as apellidos, up to 3 chars each
+  const apellidoPart = tokens.slice(-2).map(t => t.slice(0, 3)).join("").padEnd(3, "X").slice(0, 6);
+
+  // Hour + minute from timestamp (ms)
+  const d = timestamp ? new Date(timestamp) : new Date();
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  const timePart = hh + mm;
+
+  return apellidoPart + timePart;
+}
+
 function renderGuestMeta(data) {
   $("guestNameTitle").textContent = data.nombre || "Invitado";
   $("guestNumberText").textContent = data.numeroRegistro ? `#${data.numeroRegistro}` : "#—";
   $("guestPhoneText").textContent = data.phoneDisplay || data.celular || "—";
   $("guestCountryText").textContent = data.countryName || "—";
 
+  // Access code
+  const code = data.accessCode || "——";
+  if ($("guestAccessCode")) $("guestAccessCode").textContent = code;
+  if ($("guestCodeInline")) $("guestCodeInline").textContent = code;
+  if ($("guestCodeDesc")) {
+    const particles = ["de","del","la","las","los","y","e","el","al","a","o","u","da","do","dos","das","san","santa"];
+    const tokens = (data.nombre || "")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase().replace(/[^A-Z\s]/g, "")
+      .split(/\s+/).filter(Boolean)
+      .filter(t => !particles.includes(t.toLowerCase()));
+    const apellidos = tokens.slice(-2).join(" ") || "—";
+    const ts = data.registradoEn?.toMillis?.() || null;
+    const timeStr = ts ? new Date(ts).toLocaleTimeString("es-MX", {hour:"2-digit",minute:"2-digit"}) : "—";
+    $("guestCodeDesc").textContent = `Apellidos: ${apellidos} · Hora de registro: ${timeStr}`;
+  }
+
   $("guestLocationTitle").textContent = eventConfig.locationTitle || defaultConfig.locationTitle;
-  $("guestLocationTitle2").textContent = eventConfig.locationTitle || defaultConfig.locationTitle;
   $("guestGroupTitle").textContent = eventConfig.groupTitle || defaultConfig.groupTitle;
-  $("guestGroupTitle2").textContent = eventConfig.groupTitle || defaultConfig.groupTitle;
 
   $("guestLocationLink").href = eventConfig.locationUrl || defaultConfig.locationUrl;
   $("guestGroupLink").href = eventConfig.groupUrl || defaultConfig.groupUrl;
 
-  $("guestLocationTitle2").textContent = eventConfig.locationTitle || defaultConfig.locationTitle;
-  $("guestGroupTitle2").textContent = eventConfig.groupTitle || defaultConfig.groupTitle;
-
   const dateText = formatDateTime(eventConfig.date, eventConfig.time);
   $("guestDateTitle").textContent = dateText;
-  $("guestDateTitle2").textContent = dateText;
 
   if (data.asistira === true) {
     $("guestStatusBadge").innerHTML = "<i></i> Estado: asistirá";
@@ -1385,6 +1433,8 @@ async function registrar() {
     }
 
     const numeroRegistro = await nextCounter("guestCounter");
+    const nowMs = Date.now();
+    const accessCode = generateAccessCode(nombreRaw, nowMs);
 
     const docRef = await db.collection("invitados").add({
       numeroRegistro,
@@ -1398,6 +1448,7 @@ async function registrar() {
       waDigits: phoneInfo.waDigits || "",
       codigo: codigoRaw,
       planCoincidencia: coincidencia,
+      accessCode,
       asistira: null,
       registradoEn: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -1496,16 +1547,11 @@ function applyConfigToDOM(config) {
   const c = { ...defaultConfig, ...(config || {}) };
   eventConfig = c;
 
-  $("guestLocationTitle").textContent = c.locationTitle;
-  $("guestLocationTitle2").textContent = c.locationTitle;
-  $("guestGroupTitle").textContent = c.groupTitle;
-  $("guestGroupTitle2").textContent = c.groupTitle;
-
-  $("guestLocationLink").href = c.locationUrl;
-  $("guestGroupLink").href = c.groupUrl;
-
-  $("guestDateTitle").textContent = formatDateTime(c.date, c.time);
-  $("guestDateTitle2").textContent = formatDateTime(c.date, c.time);
+  if ($("guestLocationTitle")) $("guestLocationTitle").textContent = c.locationTitle;
+  if ($("guestGroupTitle")) $("guestGroupTitle").textContent = c.groupTitle;
+  if ($("guestLocationLink")) $("guestLocationLink").href = c.locationUrl;
+  if ($("guestGroupLink")) $("guestGroupLink").href = c.groupUrl;
+  if ($("guestDateTitle")) $("guestDateTitle").textContent = formatDateTime(c.date, c.time);
 
   $("adminLocationText").textContent = c.locationTitle;
   $("adminLocationUrlText").textContent = c.locationUrl;
